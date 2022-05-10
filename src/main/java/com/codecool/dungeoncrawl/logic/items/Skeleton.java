@@ -1,6 +1,7 @@
-package com.codecool.dungeoncrawl.logic.actors;
+package com.codecool.dungeoncrawl.logic.items;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.actors.Actor;
 
 public class Skeleton extends Actor {
     public Skeleton(Cell cell) {
@@ -11,4 +12,5 @@ public class Skeleton extends Actor {
     public String getTileName() {
         return "skeleton";
     }
+
 }
