@@ -4,6 +4,9 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.actors.Actor;
+import com.codecool.dungeoncrawl.logic.actors.Ghost;
+import com.codecool.dungeoncrawl.logic.actors.Zombie;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -16,6 +19,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.util.ConcurrentModificationException;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
@@ -76,6 +81,24 @@ public class Main extends Application {
                 map.getPlayer().move(1, 0);
                 refresh();
                 break;
+        }
+        // the monsters move comes here:
+        monstersAct(map);
+    }
+
+    public void monstersAct(GameMap map) {
+        System.out.println("monster moves");
+        try {
+            map.removeDeadMonsters();
+        } catch (ConcurrentModificationException e){
+            System.out.println("No monsters on map.");
+        }
+        for (Actor monster: map.getMonsters()) {
+            if (monster instanceof Zombie) {
+                ((Zombie) monster).move();
+            } else if (monster instanceof Ghost) {
+                ((Ghost) monster).move();
+            }
         }
     }
 
