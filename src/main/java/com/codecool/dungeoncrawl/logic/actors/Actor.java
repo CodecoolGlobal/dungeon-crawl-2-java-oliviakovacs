@@ -6,7 +6,8 @@ import com.codecool.dungeoncrawl.logic.Drawable;
 
 public abstract class Actor implements Drawable {
     private Cell cell;
-    private int health = 10;
+    private int health;
+    private int attackStrength;
 
     public Actor(Cell cell) {
         this.cell = cell;
@@ -29,10 +30,10 @@ public abstract class Actor implements Drawable {
     public void attack(Cell nextCell) {
         System.out.println("FIGHT!!!!");
         Actor monster = nextCell.getActor();
-        monster.setHealth(monster.getHealth()-5);
+        monster.setHealth(monster.getHealth()-this.getAttackStrength());
         if (monster.getHealth()>0) {                     // ...if the monster survived, it fights back:
             System.out.println("Monster fights back!");
-            this.setHealth(this.getHealth()-2);
+            this.setHealth(this.getHealth()-monster.getAttackStrength());
             if (this.getHealth()<=0) {                   // ...if player dies:
                 System.out.println("You died! Game over.");
             } else {                                     // ...if player survived:
@@ -68,5 +69,13 @@ public abstract class Actor implements Drawable {
 
     public int getY() {
         return cell.getY();
+    }
+
+    public int getAttackStrength() {
+        return attackStrength;
+    }
+
+    public void setAttackStrength(int attackStrength) {
+        this.attackStrength = attackStrength;
     }
 }

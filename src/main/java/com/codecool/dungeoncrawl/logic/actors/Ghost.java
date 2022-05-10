@@ -5,38 +5,39 @@ import com.codecool.dungeoncrawl.logic.CellType;
 
 import java.util.Random;
 
-public class Zombie extends Actor {
-    public final int HEALTH = 10;
-    public static final int ATTACK_STRENGTH = 2;
-
-    public Zombie(Cell cell) {
+public class Ghost extends Actor {
+    public final int HEALTH = 20;
+    public static final int ATTACK_STRENGTH = 3;
+    private String moveDirection = "right";
+    public Ghost(Cell cell) {
         super(cell);
         this.setHealth(HEALTH);
         this.setAttackStrength(ATTACK_STRENGTH);
     }
 
-
     public void move() {
-        Random myRandom = new Random();
+        int width = this.getCell().getGameMap().getWidth();
+        int currentX = this.getCell().getX();
+        if (currentX == width-1) {
+            moveDirection="left";
+        } else if (currentX == 0) {
+            moveDirection = "right";
+        }
         Cell nextCell;
         while (true) {
-            int randomDirection = myRandom.nextInt(4);
-            switch (randomDirection) {
-                case 0:
-                    nextCell = this.getCell().getNeighbor(0, 1);
-                    break;
-                case 1:
-                    nextCell = this.getCell().getNeighbor(0, -1);
-                    break;
-                case 2:
+            switch (moveDirection) {
+                case "right":
                     nextCell = this.getCell().getNeighbor(1, 0);
                     break;
-                default:
+                case "left":
                     nextCell = this.getCell().getNeighbor(-1, 0);
+                    break;
+                default:
+                    nextCell = this.getCell().getNeighbor(1, 0);
                     break;
             }
 
-            if (nextCell.getActor() == null && nextCell.getType() == CellType.FLOOR) {
+            if (nextCell.getActor() == null) {
                 this.getCell().setActor(null);
                 nextCell.setActor(this);
                 setCell(nextCell);
@@ -47,6 +48,6 @@ public class Zombie extends Actor {
 
     @Override
     public String getTileName() {
-        return "zombie";
+        return "ghost";
     }
 }

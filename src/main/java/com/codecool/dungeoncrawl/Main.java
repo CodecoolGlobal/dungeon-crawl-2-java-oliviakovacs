@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Actor;
+import com.codecool.dungeoncrawl.logic.actors.Ghost;
 import com.codecool.dungeoncrawl.logic.actors.Zombie;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -87,6 +88,8 @@ public class Main extends Application {
         for (Actor monster: map.getMonsters()) {
             if (monster instanceof Zombie) {
                 ((Zombie) monster).move();
+            } else if (monster instanceof Ghost) {
+                ((Ghost) monster).move();
             }
         }
     }
