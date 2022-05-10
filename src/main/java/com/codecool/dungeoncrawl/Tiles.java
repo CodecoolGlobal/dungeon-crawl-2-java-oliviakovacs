@@ -29,6 +29,7 @@ public class Tiles {
         tileMap.put("player", new Tile(27, 0));
         tileMap.put("skeleton", new Tile(29, 6));
         tileMap.put("zombie", new Tile(24, 7));
+        tileMap.put("ghost", new Tile(26, 6));
     }
 
     public static void drawTile(GraphicsContext context, Drawable d, int x, int y) {
