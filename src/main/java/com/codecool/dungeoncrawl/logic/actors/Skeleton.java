@@ -13,6 +13,8 @@ public class Skeleton extends Actor {
         this.setAttackStrength(ATTACK_STRENGTH);
     }
 
+    public void move() {}
+
     @Override
     public String getTileName() {
         return "skeleton";

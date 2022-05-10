@@ -68,6 +68,7 @@ public class MapLoader {
                         case 'c':
                             cell.setType(CellType.WALL);
                             new Closeddoor(cell);
+                            break;
                         case 'r':
                             cell.setType(CellType.FLOOR);
                             new Stair(cell);
