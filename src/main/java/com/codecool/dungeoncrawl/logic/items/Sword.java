@@ -1,9 +1,10 @@
 package com.codecool.dungeoncrawl.logic.items;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.actors.Actor;
 
-public class Monster extends Item {
-    public Monster(Cell cell){super(cell);}
+public class Sword extends Item {
+    public Sword(Cell cell){super(cell);}
 
     @Override
     public String getTileName(){
