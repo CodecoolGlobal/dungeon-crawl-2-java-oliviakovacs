@@ -31,7 +31,10 @@ public class Main extends Application {
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
     Button pickUpButton = new Button("Pick up");
+
     Actor myPlayer = map.getPlayer();
+
+    Label playerInventory = new Label("INVENTORY: ");
 
     public static void main(String[] args) {
         launch(args);
@@ -45,11 +48,14 @@ public class Main extends Application {
 
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
-        ui.add(pickUpButton,0,2);
+        ui.add(pickUpButton, 0, 2);
         pickUpButton.setOnAction(mousedown -> {
             map.getPlayer().pickUpItem();
+            refresh();
         });
         pickUpButton.setFocusTraversable(false);
+        ui.add(new Label("INVENTORY:"), 0, 3);
+        ui.add(playerInventory, 0, 4);
 
         BorderPane borderPane = new BorderPane();
 
@@ -111,7 +117,7 @@ public class Main extends Application {
 //        } catch (ConcurrentModificationException e){
 //            System.out.println("No monsters on map.");
 //        }
-        for (Actor monster: map.getMonsters()) {
+        for (Actor monster : map.getMonsters()) {
             if (monster instanceof Zombie) {
                 ((Zombie) monster).move();
             } else if (monster instanceof Ghost) {
@@ -120,8 +126,10 @@ public class Main extends Application {
         }
     }
 
-    public Boolean isPlayerDead(Actor player){
-        if (player.getHealth() <= 0) {return true;}
+    public Boolean isPlayerDead(Actor player) {
+        if (player.getHealth() <= 0) {
+            return true;
+        }
         return false;
     }
 
@@ -148,8 +156,11 @@ public class Main extends Application {
             }
             healthLabel.setText("" + map.getPlayer().getHealth());
 
+            playerInventory.setText("");
+            playerInventory.setText(map.getPlayer().displayInventory());
+
             if (isPlayerDead(map.getPlayer())) {
-                healthLabel.setText("YOU DIED!  GAME OVER!" );
+                healthLabel.setText("YOU DIED!  GAME OVER!");
             }
         }
     }
