@@ -89,6 +89,9 @@ public class MapLoader {
                         case '*':
                             cell.setType(CellType.WATER);
                             break;
+                        case '<':
+                            cell.setType(CellType.BRIDGE);
+                            break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
                     }
