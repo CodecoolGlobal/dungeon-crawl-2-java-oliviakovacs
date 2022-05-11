@@ -71,32 +71,37 @@ public class Main extends Application {
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
+                monstersAct(map);
                 refresh();
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
+                monstersAct(map);
                 refresh();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
+                monstersAct(map);
                 refresh();
                 break;
             case RIGHT:
                 map.getPlayer().move(1, 0);
+                monstersAct(map);
                 refresh();
                 break;
         }
-        // the monsters move comes here:
-        monstersAct(map);
+        if (isPlayerDead(map.getPlayer())) {
+            System.out.println("---------------Here the game will be stopped!!!-------------");
+            //System.exit(0);
+        }
     }
 
     public void monstersAct(GameMap map) {
-        System.out.println("monster moves");
-        try {
-            map.removeDeadMonsters();
-        } catch (ConcurrentModificationException e){
-            System.out.println("No monsters on map.");
-        }
+//        try {
+//            map.removeDeadMonsters();
+//        } catch (ConcurrentModificationException e){
+//            System.out.println("No monsters on map.");
+//        }
         for (Actor monster: map.getMonsters()) {
             if (monster instanceof Zombie) {
                 ((Zombie) monster).move();
@@ -104,6 +109,11 @@ public class Main extends Application {
                 ((Ghost) monster).move();
             }
         }
+    }
+
+    public Boolean isPlayerDead(Actor player){
+        if (player.getHealth() <= 0) {return true;}
+        return false;
     }
 
     private void refresh() {
@@ -122,8 +132,13 @@ public class Main extends Application {
 
             }
             healthLabel.setText("" + map.getPlayer().getHealth());
+
             playerInventory.setText("");
             playerInventory.setText(map.getPlayer().displayInventory());
+
+            if (isPlayerDead(map.getPlayer())) {
+                healthLabel.setText("YOU DIED!  GAME OVER!" );
+            }
         }
     }
 }
