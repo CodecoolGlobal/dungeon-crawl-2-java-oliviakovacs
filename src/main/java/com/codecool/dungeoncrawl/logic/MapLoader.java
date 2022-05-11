@@ -15,8 +15,13 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 public class MapLoader {
-    public static GameMap loadMap() {
-        InputStream is = MapLoader.class.getResourceAsStream("/map.txt");
+    public static GameMap loadMap(int playerOnMap) {
+        InputStream is;
+        if (playerOnMap == 1) {
+            is = MapLoader.class.getResourceAsStream("/map.txt");
+        } else {
+            is = MapLoader.class.getResourceAsStream("/mapTwo.txt");
+        }
         Scanner scanner = new Scanner(is);
         int width = scanner.nextInt();
         int height = scanner.nextInt();
@@ -38,6 +43,9 @@ public class MapLoader {
                             break;
                         case '.':
                             cell.setType(CellType.FLOOR);
+                            break;
+                        case 'w':
+                            cell.setType(CellType.WIN_TILE);
                             break;
                         case 's':
                             cell.setType(CellType.FLOOR);
@@ -69,8 +77,7 @@ public class MapLoader {
                             cell.setType(CellType.WALL);
                             new Closeddoor(cell);
                         case 'r':
-                            cell.setType(CellType.FLOOR);
-                            new Stair(cell);
+                            cell.setType(CellType.STAIRS);
                             break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");

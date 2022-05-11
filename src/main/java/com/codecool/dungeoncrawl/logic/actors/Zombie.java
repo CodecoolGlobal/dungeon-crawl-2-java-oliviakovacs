@@ -38,6 +38,8 @@ public class Zombie extends Actor {
             }
     }
 
+
+
     @Override
     public String getTileName() {
         return "zombie";

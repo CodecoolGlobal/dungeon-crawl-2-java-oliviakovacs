@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
@@ -23,13 +24,14 @@ import javafx.stage.Stage;
 import java.util.ConcurrentModificationException;
 
 public class Main extends Application {
-    GameMap map = MapLoader.loadMap();
+    GameMap map = MapLoader.loadMap(1);
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
     Button pickUpButton = new Button("Pick up");
+    Actor myPlayer = map.getPlayer();
 
     public static void main(String[] args) {
         launch(args);
@@ -90,6 +92,17 @@ public class Main extends Application {
             System.out.println("---------------Here the game will be stopped!!!-------------");
             //System.exit(0);
         }
+        checkForWin();
+        changeMap();
+
+
+//        if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 2) {
+//            map = MapLoader.loadMap(2);
+//            map.getPlayer().setChangeMap(false);
+//        } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 1){
+//            map = MapLoader.loadMap(1);
+//            map.getPlayer().setChangeMap(false);
+//        }
     }
 
     public void monstersAct(GameMap map) {
@@ -110,6 +123,12 @@ public class Main extends Application {
     public Boolean isPlayerDead(Actor player){
         if (player.getHealth() <= 0) {return true;}
         return false;
+    }
+
+    public void checkForWin() {
+        if (map.getPlayer().getCell().getType() == CellType.WIN_TILE) {
+            System.out.println("---------------------  YOU WON!!!  -----------------------");
+        }
     }
 
     private void refresh() {
@@ -133,5 +152,26 @@ public class Main extends Application {
                 healthLabel.setText("YOU DIED!  GAME OVER!" );
             }
         }
+    }
+
+    public void changeMap() {
+        Player oldPlayer = map.getPlayer();
+        int previousHealth = map.getPlayer().getHealth();
+        Cell previousCell = map.getPlayer().getCell();
+
+        if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 2) {
+            map = MapLoader.loadMap(2);
+            map.getPlayer().setChangeMap(false);
+            map.getPlayer().setHealth(previousHealth);
+
+        } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 1){
+            map = MapLoader.loadMap(1);
+            map.getPlayer().setChangeMap(false);
+            map.getPlayer().setHealth(previousHealth);
+
+        }
+//        map.getPlayer().setHealth(previousHealth);
+//        map.getPlayer().setCell(previousCell);
+
     }
 }
