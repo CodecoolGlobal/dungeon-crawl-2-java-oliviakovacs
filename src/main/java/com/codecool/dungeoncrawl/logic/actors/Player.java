@@ -5,6 +5,7 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.items.door.Closeddoor;
+import com.codecool.dungeoncrawl.logic.items.door.Door;
 import com.codecool.dungeoncrawl.logic.items.door.Opendoor;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class Player extends Actor {
     }
 
     public void pickUpItem() {
-        if (this.getCell().getItem() != null) {
+        if (this.getCell().getItem() != null && !(this.getCell().getItem() instanceof Door)) {
             addToInventory(this.getCell().getItem());
             System.out.println(inventory);
             this.getCell().setItem(null);
