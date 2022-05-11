@@ -26,7 +26,16 @@ public class Player extends Actor {
 
     public final int HEALTH = 10;
     public final int ATTACK_STRENGTH = 5;
+    private int playerOnMap = 1;
+    private boolean changeMap = false;
 
+    public boolean getChangeMap() {
+        return changeMap;
+    }
+
+    public void setChangeMap(boolean changeMap) {
+        this.changeMap = changeMap;
+    }
 
     public Player(Cell cell) {
         super(cell);
@@ -128,4 +137,13 @@ public class Player extends Actor {
     }
 
 
+
+
+    public int getPlayerOnMap() {
+        return playerOnMap;
+    }
+
+    public void setPlayerOnMap(int playerOnMap) {
+        this.playerOnMap = playerOnMap;
+    }
 }
