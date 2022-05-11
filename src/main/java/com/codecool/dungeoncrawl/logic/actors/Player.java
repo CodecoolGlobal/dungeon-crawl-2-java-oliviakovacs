@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.items.Key;
+import com.codecool.dungeoncrawl.logic.items.door.Closeddoor;
 import com.codecool.dungeoncrawl.logic.items.door.Opendoor;
 
 import java.util.ArrayList;
@@ -56,21 +57,22 @@ public class Player extends Actor {
     public void move(int dx, int dy) {
         Cell cell = getCell();
         Cell nextCell = getCell().getNeighbor(dx, dy);
-        if (nextCell.getType() == CellType.FLOOR || nextCell.getType() == CellType.OPENDOOR) {
+        if (nextCell.getType() == CellType.FLOOR) {
             if (nextCell.getActor() == null) {
                 cell.setActor(null);
                 nextCell.setActor(this);
                 setCell(nextCell);
             }
-        } else if (nextCell.getType() == CellType.CLOSEDDOOR && nextCell.getActor() == null) {
+        } else if (nextCell.getType() == CellType.WALL && nextCell.getItem() instanceof Closeddoor && nextCell.getActor() == null) {
             int counter = 0;
             for (Item item : inventory) {
                 counter += 1;
                 if (item instanceof Key) {          //ha van nála key
                     removeFromInventory(item);
                     cell.setActor(null);
-                    nextCell.setType(CellType.OPENDOOR);
+                    nextCell.setType(CellType.FLOOR);
                     nextCell.setActor(this);
+                    nextCell.setItem(new Opendoor(nextCell));
                     setCell(nextCell);
                     break;
                 } else if (inventory.size() == counter) {       //ha nincs nála key
