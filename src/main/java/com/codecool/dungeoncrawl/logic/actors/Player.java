@@ -1,6 +1,16 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+
+import com.codecool.dungeoncrawl.logic.CellType;
+import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.logic.items.Key;
+import com.codecool.dungeoncrawl.logic.items.door.Closeddoor;
+import com.codecool.dungeoncrawl.logic.items.door.Door;
+import com.codecool.dungeoncrawl.logic.items.door.Opendoor;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.items.Sword;
@@ -12,8 +22,8 @@ import java.util.HashMap;
 
 
 public class Player extends Actor {
-
     private ArrayList<Item> inventory;
+
     public final int HEALTH = 10;
     public final int ATTACK_STRENGTH = 5;
 
@@ -29,26 +39,60 @@ public class Player extends Actor {
         return "player";
     }
 
-    public void addToInventory(Item item){
+
+    public void addToInventory(Item item) {
         inventory.add(item);
     }
 
-    public void removeFromInventory(Item item){
+    public void removeFromInventory(Item item) {
         inventory.remove(item);
     }
 
-    public ArrayList getInventory(){
+    public ArrayList getInventory() {
         return inventory;
     }
 
-    public void pickUpItem(){
-        if(this.getCell().getItem() != null){
+    public void pickUpItem() {
+        if (this.getCell().getItem() != null && !(this.getCell().getItem() instanceof Door)) {
+
             addToInventory(this.getCell().getItem());
             System.out.println(inventory);
             this.getCell().setItem(null);
         }
 
     }
+    public void move(int dx, int dy) {
+        Cell cell = getCell();
+        Cell nextCell = getCell().getNeighbor(dx, dy);
+        if (nextCell.getType() == CellType.FLOOR) {
+            if (nextCell.getActor() == null) {
+                cell.setActor(null);
+                nextCell.setActor(this);
+                setCell(nextCell);
+            }
+        } else if (cell.getActor() instanceof Player && nextCell.getType() == CellType.WALL && nextCell.getItem() instanceof Closeddoor && nextCell.getActor() == null) {
+            int counter = 0;
+            for (Item item : inventory) {
+                counter += 1;
+                if (item instanceof Key) {          //ha van nála key
+                    removeFromInventory(item);
+                    cell.setActor(null);
+                    nextCell.setType(CellType.FLOOR);
+                    nextCell.setActor(this);
+                    nextCell.setItem(new Opendoor(nextCell));
+                    setCell(nextCell);
+                    break;
+                } else if (inventory.size() == counter) {       //ha nincs nála key
+                    System.out.println("Key missing to open door.");
+                }
+//                if (inventory.contains(instanceof Key)) {
+//                  if (inventory.stream().anyMatch(item -> item instanceof Key)) {
+            }
+        } else {                               //...if there is a monster on the cell:
+            attack(cell, nextCell);
+        }
+    }
+
 
     public String displayInventory() {
         StringBuilder display = new StringBuilder();
@@ -76,5 +120,6 @@ public class Player extends Actor {
 
         return display.toString();
     }
+
 
 }
