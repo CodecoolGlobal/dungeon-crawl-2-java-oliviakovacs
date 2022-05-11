@@ -7,7 +7,10 @@ public enum CellType {
     WALL("wall"),
     WIN_TILE("win_tile"),
     OPENDOOR("opendoor"),
-    CLOSEDDOOR("closeddoor");
+    CLOSEDDOOR("closeddoor"),
+    FLOORTWO("floortwo"),
+    WALLTWO("walltwo"),
+    WATER("water");
 
     private final String tileName;
 

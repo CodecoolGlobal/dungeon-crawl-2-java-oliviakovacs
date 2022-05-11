@@ -80,6 +80,15 @@ public class MapLoader {
                         case 'r':
                             cell.setType(CellType.STAIRS);
                             break;
+                        case '-':
+                            cell.setType(CellType.FLOORTWO);
+                            break;
+                        case '>':
+                            cell.setType(CellType.WALLTWO);
+                            break;
+                        case '*':
+                            cell.setType(CellType.WATER);
+                            break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
                     }

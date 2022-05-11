@@ -33,7 +33,7 @@ public abstract class Actor implements Drawable {
         }
 
 
-        if(nextCell.getType() == CellType.FLOOR || nextCell.getType() == CellType.STAIRS || nextCell.getType() == CellType.WIN_TILE){
+        if(nextCell.getType() == CellType.FLOOR || nextCell.getType() == CellType.FLOORTWO || nextCell.getType() == CellType.STAIRS || nextCell.getType() == CellType.WIN_TILE){
             if (nextCell.getActor() == null) {
                 cell.setActor(null);
                 nextCell.setActor(this);
