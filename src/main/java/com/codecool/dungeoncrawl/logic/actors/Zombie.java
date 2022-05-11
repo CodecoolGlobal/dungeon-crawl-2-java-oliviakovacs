@@ -19,30 +19,23 @@ public class Zombie extends Actor {
     public void move() {
         Random myRandom = new Random();
         Cell nextCell;
-        while (true) {
-            int randomDirection = myRandom.nextInt(4);
+            int randomDirection = myRandom.nextInt(6);
             switch (randomDirection) {
                 case 0:
-                    nextCell = this.getCell().getNeighbor(0, 1);
+                    move(0,1);
                     break;
                 case 1:
-                    nextCell = this.getCell().getNeighbor(0, -1);
+                    move(0,-1);
                     break;
                 case 2:
-                    nextCell = this.getCell().getNeighbor(1, 0);
+                    move(1,0);
+                    break;
+                case 3:
+                    move(-1,0);
                     break;
                 default:
-                    nextCell = this.getCell().getNeighbor(-1, 0);
                     break;
             }
-
-            if (nextCell.getActor() == null && nextCell.getType() == CellType.FLOOR) {
-                this.getCell().setActor(null);
-                nextCell.setActor(this);
-                setCell(nextCell);
-                break;
-            }
-        }
     }
 
     @Override

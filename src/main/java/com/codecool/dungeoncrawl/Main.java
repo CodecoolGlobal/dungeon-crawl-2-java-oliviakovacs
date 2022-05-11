@@ -3,6 +3,7 @@ package com.codecool.dungeoncrawl;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Ghost;
 import com.codecool.dungeoncrawl.logic.actors.Zombie;
@@ -11,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -27,6 +29,8 @@ public class Main extends Application {
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
+    Button pickUpButton = new Button("Pick up");
+    Label playerInventory = new Label("INVENTORY: ");
 
     public static void main(String[] args) {
         launch(args);
@@ -40,6 +44,14 @@ public class Main extends Application {
 
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
+        ui.add(pickUpButton, 0, 2);
+        pickUpButton.setOnAction(mousedown -> {
+            map.getPlayer().pickUpItem();
+            refresh();
+        });
+        pickUpButton.setFocusTraversable(false);
+        ui.add(new Label("INVENTORY:"), 0, 3);
+        ui.add(playerInventory, 0, 4);
 
         BorderPane borderPane = new BorderPane();
 
@@ -59,39 +71,51 @@ public class Main extends Application {
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
+                monstersAct(map);
                 refresh();
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
+                monstersAct(map);
                 refresh();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
+                monstersAct(map);
                 refresh();
                 break;
             case RIGHT:
                 map.getPlayer().move(1, 0);
+                monstersAct(map);
                 refresh();
                 break;
         }
-        // the monsters move comes here:
-        monstersAct(map);
+        if (isPlayerDead(map.getPlayer())) {
+            System.out.println("---------------Here the game will be stopped!!!-------------");
+            //System.exit(0);
+        }
     }
 
     public void monstersAct(GameMap map) {
-        System.out.println("monster moves");
-        try {
-            map.removeDeadMonsters();
-        } catch (ConcurrentModificationException e){
-            System.out.println("No monsters on map.");
-        }
-        for (Actor monster: map.getMonsters()) {
+//        try {
+//            map.removeDeadMonsters();
+//        } catch (ConcurrentModificationException e){
+//            System.out.println("No monsters on map.");
+//        }
+        for (Actor monster : map.getMonsters()) {
             if (monster instanceof Zombie) {
                 ((Zombie) monster).move();
             } else if (monster instanceof Ghost) {
                 ((Ghost) monster).move();
             }
         }
+    }
+
+    public Boolean isPlayerDead(Actor player) {
+        if (player.getHealth() <= 0) {
+            return true;
+        }
+        return false;
     }
 
     private void refresh() {
@@ -110,6 +134,13 @@ public class Main extends Application {
 
             }
             healthLabel.setText("" + map.getPlayer().getHealth());
+
+            playerInventory.setText("");
+            playerInventory.setText(map.getPlayer().displayInventory());
+
+            if (isPlayerDead(map.getPlayer())) {
+                healthLabel.setText("YOU DIED!  GAME OVER!");
+            }
         }
     }
 }

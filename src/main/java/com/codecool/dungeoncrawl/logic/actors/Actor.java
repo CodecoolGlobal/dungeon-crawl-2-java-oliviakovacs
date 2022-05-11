@@ -14,6 +14,7 @@ public abstract class Actor implements Drawable {
         this.cell.setActor(this);
     }
 
+
     public abstract void move();
 
 //    public void move(int dx, int dy) {
@@ -29,23 +30,30 @@ public abstract class Actor implements Drawable {
 //        }
 //    }
 
-    public void attack(Cell nextCell) {
-        System.out.println("FIGHT!!!!");
-        Actor monster = nextCell.getActor();
-        monster.setHealth(monster.getHealth()-this.getAttackStrength());
-        if (monster.getHealth()>0) {                     // ...if the monster survived, it fights back:
-            System.out.println("Monster fights back!");
-            this.setHealth(this.getHealth()-monster.getAttackStrength());
-            if (this.getHealth()<=0) {                   // ...if player dies:
-                System.out.println("You died! Game over.");
-            } else {                                     // ...if player survived:
+
+
+    public void attack(Cell cell, Cell nextCell) {
+        Actor monsterAttacked = nextCell.getActor();
+        System.out.println("FIGHT!!!! " + this.getTileName() + " attacked the " + monsterAttacked.getTileName());
+        monsterAttacked.setHealth(monsterAttacked.getHealth()-this.getAttackStrength());
+        if (monsterAttacked.getHealth()>0) {                     // ...if the monster survived, it fights back:
+            System.out.println( monsterAttacked.getTileName() + " fights back!");
+            this.setHealth(this.getHealth()-monsterAttacked.getAttackStrength());
+            if (this.getHealth()<=0) {                   // ...if attacker dies:
+                System.out.println("The attacker "+ this.getTileName()+ " died!");
+                cell.setActor(null);
+            } else {                                     // ...if attacker survives:
+                nextCell.setSecondActor(monsterAttacked);
+                cell.setActor(null);
+                nextCell.setActor(this);
+                this.setCell(nextCell);
                 System.out.println("Both survived.");
             }
         } else {                                         // ...if the monster died:
-            System.out.println("You killed the monster!!");
+            System.out.println("The attacked "+ monsterAttacked.getTileName() +" character was killed!");
             cell.setActor(null);
             nextCell.setActor(this);
-            cell = nextCell;
+            this.setCell(nextCell);
         }
     }
 
