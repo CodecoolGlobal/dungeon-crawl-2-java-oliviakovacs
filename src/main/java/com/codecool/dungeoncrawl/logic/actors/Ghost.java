@@ -24,7 +24,6 @@ public class Ghost extends Actor {
             moveDirection = "right";
         }
         Cell nextCell;
-        while (true) {
             switch (moveDirection) {
                 case "right":
                     nextCell = this.getCell().getNeighbor(1, 0);
@@ -38,12 +37,17 @@ public class Ghost extends Actor {
             }
 
             if (nextCell.getActor() == null) {
-                this.getCell().setActor(null);
+                if (this.getCell().getSecondActor() != null) {
+                    this.getCell().setActor(this.getCell().getSecondActor());
+                    this.getCell().setSecondActor(null);
+                } else {
+                    this.getCell().setActor(null);
+                }
                 nextCell.setActor(this);
-                setCell(nextCell);
-                break;
+                this.setCell(nextCell);
+            } else {
+                attack(this.getCell(), nextCell);
             }
-        }
     }
 
     @Override
