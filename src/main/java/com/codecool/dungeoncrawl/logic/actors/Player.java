@@ -53,6 +53,10 @@ public class Player extends Actor {
         inventory.add(item);
     }
 
+    public void setInventory(ArrayList<Item> inventory) {
+        this.inventory = inventory;
+    }
+
     public void removeFromInventory(Item item) {
         inventory.remove(item);
     }
@@ -76,11 +80,8 @@ public class Player extends Actor {
             counter += 1;
             if (item instanceof Key) {          //ha van nála key
                 removeFromInventory(item);
-                cell.setActor(null);
                 nextCell.setType(CellType.FLOOR);
-                nextCell.setActor(this);
                 nextCell.setItem(new Opendoor(nextCell));
-                setCell(nextCell);
                 break;
             } else if (inventory.size() == counter) {       //ha nincs nála key
                 System.out.println("Key missing to open door.");

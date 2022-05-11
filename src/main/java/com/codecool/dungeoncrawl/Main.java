@@ -8,6 +8,7 @@ import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Ghost;
 import com.codecool.dungeoncrawl.logic.actors.Zombie;
+import com.codecool.dungeoncrawl.logic.items.Item;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -21,6 +22,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
 public class Main extends Application {
@@ -169,16 +171,19 @@ public class Main extends Application {
         Player oldPlayer = map.getPlayer();
         int previousHealth = map.getPlayer().getHealth();
         Cell previousCell = map.getPlayer().getCell();
+        ArrayList<Item> previousInventory = map.getPlayer().getInventory();
 
         if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 2) {
             map = MapLoader.loadMap(2);
             map.getPlayer().setChangeMap(false);
             map.getPlayer().setHealth(previousHealth);
+            map.getPlayer().setInventory(previousInventory);
 
         } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 1){
             map = MapLoader.loadMap(1);
             map.getPlayer().setChangeMap(false);
             map.getPlayer().setHealth(previousHealth);
+            map.getPlayer().setInventory(previousInventory);
 
         }
 //        map.getPlayer().setHealth(previousHealth);
