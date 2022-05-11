@@ -105,11 +105,17 @@ public class Player extends Actor {
                 if(keyCount <= 1){
                     inventory_dict.put(item.getTileName(), keyCount);
                 }else{
-                    inventory_dict.put("key", keyCount);
+                    inventory_dict.put("Key", keyCount);
                 }
 
             } else if (item instanceof Sword){
-                inventory_dict.put(item.getTileName(), swordCount+=1);
+                swordCount += 1;
+                if(keyCount <= 1){
+                    inventory_dict.put(item.getTileName(), swordCount);
+                }else{
+                    inventory_dict.put("Sword", swordCount);
+                }
+
             }
         }
         for(HashMap.Entry<String, Integer> element: inventory_dict.entrySet()){
