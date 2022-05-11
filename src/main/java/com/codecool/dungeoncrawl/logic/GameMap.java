@@ -4,7 +4,6 @@ import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GameMap {
     private int width;
@@ -39,7 +38,6 @@ public class GameMap {
 
     public void addMonsterToMap(Actor monster) {
         monsters.add(monster);
-        System.out.println("Monster added. List size:" + monsters.size());
     }
 
     public void removeDeadMonsters(){
@@ -48,7 +46,6 @@ public class GameMap {
                 monsters.remove(monster);
                 System.out.println("One monster removed. " + monsters.size() + " left on map.");
             }
-
         }
     }
 
