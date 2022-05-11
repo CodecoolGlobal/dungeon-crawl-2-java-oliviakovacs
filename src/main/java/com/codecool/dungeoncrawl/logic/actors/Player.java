@@ -11,14 +11,6 @@ import com.codecool.dungeoncrawl.logic.items.door.Opendoor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-public class Player extends Actor {
-    private ArrayList<Item> inventory;
-
-//    Key key = new Key();
-
-
-
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.items.Sword;
@@ -30,7 +22,6 @@ import java.util.HashMap;
 
 
 public class Player extends Actor {
-
     private ArrayList<Item> inventory;
 
     public final int HEALTH = 10;
@@ -70,10 +61,6 @@ public class Player extends Actor {
         }
 
     }
-
-
-    public void move() {};
-
     public void move(int dx, int dy) {
         Cell cell = getCell();
         Cell nextCell = getCell().getNeighbor(dx, dy);
@@ -83,7 +70,7 @@ public class Player extends Actor {
                 nextCell.setActor(this);
                 setCell(nextCell);
             }
-        } else if (nextCell.getType() == CellType.WALL && nextCell.getItem() instanceof Closeddoor && nextCell.getActor() == null) {
+        } else if (cell.getActor() instanceof Player && nextCell.getType() == CellType.WALL && nextCell.getItem() instanceof Closeddoor && nextCell.getActor() == null) {
             int counter = 0;
             for (Item item : inventory) {
                 counter += 1;
@@ -102,9 +89,10 @@ public class Player extends Actor {
 //                  if (inventory.stream().anyMatch(item -> item instanceof Key)) {
             }
         } else {                               //...if there is a monster on the cell:
-            attack(nextCell);
+            attack(cell, nextCell);
         }
     }
+
 
     public String displayInventory() {
         StringBuilder display = new StringBuilder();
