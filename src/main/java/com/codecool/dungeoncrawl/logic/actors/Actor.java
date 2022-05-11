@@ -14,24 +14,22 @@ public abstract class Actor implements Drawable {
         this.cell.setActor(this);
     }
 
-    public void move(int dx, int dy) {
-        Cell nextCell = cell.getNeighbor(dx, dy);
-        if(nextCell.getType() == CellType.FLOOR){
-            if (nextCell.getActor() == null) {
-                if (cell.getSecondActor() != null) {
-                    cell.setActor(cell.getSecondActor());
-                    cell.setSecondActor(null);
-                } else {
-                    cell.setActor(null);
-                }
-                nextCell.setActor(this);
-                cell = nextCell;
-            } else {                               //...if there is a monster on the cell:
-                attack(this.getCell(), nextCell);
-            }
-        }
 
-    }
+    public abstract void move();
+
+//    public void move(int dx, int dy) {
+//        Cell nextCell = cell.getNeighbor(dx, dy);
+//        if(nextCell.getType() == CellType.FLOOR){
+//            if (nextCell.getActor() == null) {
+//                cell.setActor(null);
+//                nextCell.setActor(this);
+//                cell = nextCell;
+//            } else {                               //...if there is a monster on the cell:
+//                attack(nextCell);
+//            }
+//        }
+//    }
+
 
 
     public void attack(Cell cell, Cell nextCell) {
