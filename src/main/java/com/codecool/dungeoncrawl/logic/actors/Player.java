@@ -70,35 +70,22 @@ public class Player extends Actor {
         }
 
     }
-    public void move(int dx, int dy) {
-        Cell cell = getCell();
-        Cell nextCell = getCell().getNeighbor(dx, dy);
-        if (nextCell.getType() == CellType.FLOOR) {
-            if (nextCell.getActor() == null) {
+    public void tryToUnlockDoor(Cell cell, Cell nextCell){
+        int counter = 0;
+        for (Item item : inventory) {
+            counter += 1;
+            if (item instanceof Key) {          //ha van nála key
+                removeFromInventory(item);
                 cell.setActor(null);
+                nextCell.setType(CellType.FLOOR);
                 nextCell.setActor(this);
+                nextCell.setItem(new Opendoor(nextCell));
                 setCell(nextCell);
+                break;
+            } else if (inventory.size() == counter) {       //ha nincs nála key
+                System.out.println("Key missing to open door.");
             }
-        } else if (cell.getActor() instanceof Player && nextCell.getType() == CellType.WALL && nextCell.getItem() instanceof Closeddoor && nextCell.getActor() == null) {
-            int counter = 0;
-            for (Item item : inventory) {
-                counter += 1;
-                if (item instanceof Key) {          //ha van nála key
-                    removeFromInventory(item);
-                    cell.setActor(null);
-                    nextCell.setType(CellType.FLOOR);
-                    nextCell.setActor(this);
-                    nextCell.setItem(new Opendoor(nextCell));
-                    setCell(nextCell);
-                    break;
-                } else if (inventory.size() == counter) {       //ha nincs nála key
-                    System.out.println("Key missing to open door.");
-                }
-//                if (inventory.contains(instanceof Key)) {
-//                  if (inventory.stream().anyMatch(item -> item instanceof Key)) {
-            }
-        } else {                               //...if there is a monster on the cell:
-            attack(cell, nextCell);
+
         }
     }
 
@@ -135,8 +122,6 @@ public class Player extends Actor {
 
         return display.toString();
     }
-
-
 
 
     public int getPlayerOnMap() {

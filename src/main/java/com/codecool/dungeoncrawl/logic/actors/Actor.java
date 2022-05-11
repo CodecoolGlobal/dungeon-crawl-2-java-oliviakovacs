@@ -3,6 +3,7 @@ package com.codecool.dungeoncrawl.logic.actors;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Drawable;
+import com.codecool.dungeoncrawl.logic.items.door.Closeddoor;
 
 public abstract class Actor implements Drawable {
     private Cell cell;
@@ -27,6 +28,10 @@ public abstract class Actor implements Drawable {
                 }
             }
         }
+        if (nextCell.getType() == CellType.WALL && nextCell.getItem() instanceof Closeddoor) {
+            ((Player) cell.getActor()).tryToUnlockDoor(cell, nextCell);
+        }
+
 
         if(nextCell.getType() == CellType.FLOOR || nextCell.getType() == CellType.STAIRS || nextCell.getType() == CellType.WIN_TILE){
             if (nextCell.getActor() == null) {
@@ -38,8 +43,6 @@ public abstract class Actor implements Drawable {
             }
         }
     }
-
-
 
 
 
