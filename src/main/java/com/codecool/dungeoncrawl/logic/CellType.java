@@ -1,5 +1,7 @@
 package com.codecool.dungeoncrawl.logic;
 
+import com.sun.java.accessibility.util.TopLevelWindowListener;
+
 public enum CellType {
     EMPTY("empty"),
     FLOOR("floor"),
@@ -12,7 +14,11 @@ public enum CellType {
     FLOORTWO("floortwo"),
     WALLTWO("walltwo"),
     WATER("water"),
-    BRIDGE("bridge");
+    BRIDGE("bridge"),
+    ROOF("roof"),
+    TOWER("tower"),
+    WALLTHREE("wallthree"),
+    FLOORTHREE("floorthree");
 
     private final String tileName;
 

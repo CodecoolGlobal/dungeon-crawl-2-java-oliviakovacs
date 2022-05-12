@@ -34,7 +34,7 @@ public abstract class Actor implements Drawable {
         }
 
 
-        if(nextCell.getType() == CellType.FLOOR || nextCell.getType() == CellType.BRIDGE || nextCell.getType() == CellType.FLOORTWO || nextCell.getType() == CellType.STAIRS || nextCell.getType() == CellType.WIN_TILE){
+        if(nextCell.getType() == CellType.FLOOR || nextCell.getType() == CellType.FLOORTHREE || nextCell.getType() == CellType.TOWER || nextCell.getType() == CellType.BRIDGE || nextCell.getType() == CellType.FLOORTWO || nextCell.getType() == CellType.STAIRS || nextCell.getType() == CellType.WIN_TILE){
             if (nextCell.getActor() == null) {
                 if (cell.getSecondActor() != null) {
                     cell.setActor(cell.getSecondActor());

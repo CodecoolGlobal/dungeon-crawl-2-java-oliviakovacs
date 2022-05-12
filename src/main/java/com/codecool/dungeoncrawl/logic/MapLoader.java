@@ -95,7 +95,7 @@ public class MapLoader {
                         case '-':
                             cell.setType(CellType.FLOORTWO);
                             break;
-                        case '>':
+                        case '&':
                             cell.setType(CellType.WALLTWO);
                             break;
                         case '*':
@@ -103,6 +103,18 @@ public class MapLoader {
                             break;
                         case '<':
                             cell.setType(CellType.BRIDGE);
+                            break;
+                        case 't':
+                            cell.setType(CellType.ROOF);
+                            break;
+                        case 'e':
+                            cell.setType(CellType.TOWER);
+                            break;
+                        case '/':
+                            cell.setType(CellType.WALLTHREE);
+                            break;
+                        case ',':
+                            cell.setType(CellType.FLOORTHREE);
                             break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
