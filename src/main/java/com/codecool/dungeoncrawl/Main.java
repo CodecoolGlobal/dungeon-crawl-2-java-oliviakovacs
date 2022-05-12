@@ -137,7 +137,7 @@ public class Main extends Application {
     }
 
     public void checkForWin() {
-        if (map.getPlayer().getCell().getType() == CellType.WIN_TILE) {
+        if (map.getPlayer().getCell().getType() == CellType.TOWER) {
             System.out.println("---------------------  YOU WON!!!  -----------------------");
             map.getPlayer().setChangeMap(true);
             map.getPlayer().setPlayerOnMap(4);

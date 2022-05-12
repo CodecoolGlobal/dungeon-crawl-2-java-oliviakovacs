@@ -43,6 +43,10 @@ public class Tiles {
         tileMap.put("closedStair", new Tile(21, 12));
         tileMap.put("water", new Tile(8, 5));
         tileMap.put("bridge", new Tile(4, 6));
+        tileMap.put("roof", new Tile(5, 11));
+        tileMap.put("tower", new Tile(10, 17));
+        tileMap.put("wallthree", new Tile(0, 2));
+        tileMap.put("floorthree", new Tile(15, 27));
     }
 
     public static void drawTile(GraphicsContext context, Drawable d, int x, int y) {
