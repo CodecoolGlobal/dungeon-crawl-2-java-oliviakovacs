@@ -5,7 +5,8 @@ public enum CellType {
     FLOOR("floor"),
     STAIRS("stairs"),
     WALL("wall"),
-    WIN_TILE("win_tile"),
+    WIN_TILE("winTile"),
+    CLOSED_STAIR("closedStair"),
     OPENDOOR("opendoor"),
     CLOSEDDOOR("closeddoor");
 

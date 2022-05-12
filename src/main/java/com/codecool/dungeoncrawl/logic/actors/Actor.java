@@ -16,14 +16,15 @@ public abstract class Actor implements Drawable {
     }
 
     public void move(int dx, int dy) {
+
         Cell nextCell = cell.getNeighbor(dx, dy);
         if (nextCell.getType() == CellType.STAIRS) {
             if (this instanceof Player) {
                 if (((Player) this).getPlayerOnMap() == 1) {
                     ((Player) this).setPlayerOnMap(2);
                     ((Player) this).setChangeMap(true);
-                } else {
-                    ((Player) this).setPlayerOnMap(1);
+                } else if (((Player) this).getPlayerOnMap() == 2) {
+                    ((Player) this).setPlayerOnMap(3);
                     ((Player) this).setChangeMap(true);
                 }
             }
@@ -35,11 +36,16 @@ public abstract class Actor implements Drawable {
 
         if(nextCell.getType() == CellType.FLOOR || nextCell.getType() == CellType.STAIRS || nextCell.getType() == CellType.WIN_TILE){
             if (nextCell.getActor() == null) {
-                cell.setActor(null);
+                if (cell.getSecondActor() != null) {
+                    cell.setActor(cell.getSecondActor());
+                    cell.setSecondActor(null);
+                } else {
+                    cell.setActor(null);
+                }
                 nextCell.setActor(this);
                 cell = nextCell;
             } else {                               //...if there is a monster on the cell:
-                attack(cell, nextCell);
+                attack(this.getCell(), nextCell);
             }
         }
     }

@@ -3,8 +3,7 @@ package com.codecool.dungeoncrawl.logic.actors;
 import com.codecool.dungeoncrawl.logic.Cell;
 
 import com.codecool.dungeoncrawl.logic.CellType;
-import com.codecool.dungeoncrawl.logic.items.Item;
-import com.codecool.dungeoncrawl.logic.items.Key;
+import com.codecool.dungeoncrawl.logic.items.*;
 import com.codecool.dungeoncrawl.logic.items.door.Closeddoor;
 import com.codecool.dungeoncrawl.logic.items.door.Door;
 import com.codecool.dungeoncrawl.logic.items.door.Opendoor;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.items.Key;
-import com.codecool.dungeoncrawl.logic.items.Sword;
 
 import javax.lang.model.element.Element;
 import java.util.ArrayList;
@@ -26,8 +24,21 @@ public class Player extends Actor {
 
     public final int HEALTH = 10;
     public final int ATTACK_STRENGTH = 5;
-    private int playerOnMap = 1;
+    private int playerOnMap;
     private boolean changeMap = false;
+
+
+    public Player(Cell cell) {
+        super(cell);
+        this.setHealth(HEALTH);
+        this.setAttackStrength(ATTACK_STRENGTH);
+        this.inventory = new ArrayList<>();
+        setPlayerOnMap(1);
+    }
+
+    public String getTileName() {
+        return "player";
+    }
 
     public boolean getChangeMap() {
         return changeMap;
@@ -35,17 +46,6 @@ public class Player extends Actor {
 
     public void setChangeMap(boolean changeMap) {
         this.changeMap = changeMap;
-    }
-
-    public Player(Cell cell) {
-        super(cell);
-        this.setHealth(HEALTH);
-        this.setAttackStrength(ATTACK_STRENGTH);
-        this.inventory = new ArrayList<>();
-    }
-
-    public String getTileName() {
-        return "player";
     }
 
 
@@ -69,6 +69,11 @@ public class Player extends Actor {
         if (this.getCell().getItem() != null && !(this.getCell().getItem() instanceof Door)) {
 
             addToInventory(this.getCell().getItem());
+            if (this.getCell().getItem() instanceof Sword) {
+                this.setAttackStrength(getAttackStrength()+2);
+            } else if (this.getCell().getItem() instanceof Health) {
+                this.setHealth(getHealth()+3);
+            }
             System.out.println(inventory);
             this.getCell().setItem(null);
         }

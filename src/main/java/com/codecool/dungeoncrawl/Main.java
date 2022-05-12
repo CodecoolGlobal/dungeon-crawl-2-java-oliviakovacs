@@ -32,9 +32,8 @@ public class Main extends Application {
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
+    Label attackStrengthLabel = new Label();
     Button pickUpButton = new Button("Pick up");
-
-    Actor myPlayer = map.getPlayer();
 
     Label playerInventory = new Label("INVENTORY: ");
 
@@ -49,7 +48,9 @@ public class Main extends Application {
         ui.setPadding(new Insets(10));
 
         ui.add(new Label("Health: "), 0, 0);
+        ui.add(new Label("Attack Strength: "), 0, 1);
         ui.add(healthLabel, 1, 0);
+        ui.add(attackStrengthLabel, 1, 1);
         ui.add(pickUpButton, 0, 2);
         pickUpButton.setOnAction(mousedown -> {
             map.getPlayer().pickUpItem();
@@ -98,27 +99,21 @@ public class Main extends Application {
         }
         if (isPlayerDead(map.getPlayer())) {
             System.out.println("---------------Here the game will be stopped!!!-------------");
-            //System.exit(0);
+            map.getPlayer().setPlayerOnMap(5);
+            map.getPlayer().setChangeMap(true);
+            refresh();
         }
         checkForWin();
         changeMap();
-
-
-//        if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 2) {
-//            map = MapLoader.loadMap(2);
-//            map.getPlayer().setChangeMap(false);
-//        } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 1){
-//            map = MapLoader.loadMap(1);
-//            map.getPlayer().setChangeMap(false);
-//        }
     }
 
+
     public void monstersAct(GameMap map) {
-//        try {
-//            map.removeDeadMonsters();
-//        } catch (ConcurrentModificationException e){
-//            System.out.println("No monsters on map.");
-//        }
+        try {
+            map.removeDeadMonsters();
+        } catch (ConcurrentModificationException e){
+            System.out.println("No monsters on map.");
+        }
         for (Actor monster : map.getMonsters()) {
             if (monster instanceof Zombie) {
                 ((Zombie) monster).move();
@@ -138,6 +133,9 @@ public class Main extends Application {
     public void checkForWin() {
         if (map.getPlayer().getCell().getType() == CellType.WIN_TILE) {
             System.out.println("---------------------  YOU WON!!!  -----------------------");
+            map.getPlayer().setChangeMap(true);
+            map.getPlayer().setPlayerOnMap(4);
+            refresh();
         }
     }
 
@@ -157,37 +155,48 @@ public class Main extends Application {
 
             }
             healthLabel.setText("" + map.getPlayer().getHealth());
-
+            attackStrengthLabel.setText("" + map.getPlayer().getAttackStrength());
             playerInventory.setText("");
             playerInventory.setText(map.getPlayer().displayInventory());
 
             if (isPlayerDead(map.getPlayer())) {
-                healthLabel.setText("YOU DIED!  GAME OVER!");
+                healthLabel.setText("YOU DIED!");
             }
         }
     }
 
     public void changeMap() {
-        Player oldPlayer = map.getPlayer();
         int previousHealth = map.getPlayer().getHealth();
-        Cell previousCell = map.getPlayer().getCell();
         ArrayList<Item> previousInventory = map.getPlayer().getInventory();
 
-        if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 2) {
-            map = MapLoader.loadMap(2);
-            map.getPlayer().setChangeMap(false);
-            map.getPlayer().setHealth(previousHealth);
-            map.getPlayer().setInventory(previousInventory);
-
-        } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 1){
+        if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 1) {
             map = MapLoader.loadMap(1);
             map.getPlayer().setChangeMap(false);
+            map.getPlayer().setPlayerOnMap(2);
             map.getPlayer().setHealth(previousHealth);
             map.getPlayer().setInventory(previousInventory);
 
-        }
-//        map.getPlayer().setHealth(previousHealth);
-//        map.getPlayer().setCell(previousCell);
+        } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 2){
+            map = MapLoader.loadMap(2);
+            map.getPlayer().setChangeMap(false);
+            map.getPlayer().setPlayerOnMap(2);
+            map.getPlayer().setHealth(previousHealth);
+            map.getPlayer().setInventory(previousInventory);
 
+
+        } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 3){
+            map = MapLoader.loadMap(3);
+            map.getPlayer().setChangeMap(false);
+            map.getPlayer().setHealth(previousHealth);
+            map.getPlayer().setInventory(previousInventory);
+
+
+        }else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 4){
+            map = MapLoader.loadMap(4);
+            map.getPlayer().setChangeMap(false);
+        } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 5){
+            map = MapLoader.loadMap(5);
+            map.getPlayer().setChangeMap(false);
+        }
     }
 }

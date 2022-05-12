@@ -1,14 +1,13 @@
 package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.Ghost;
+import com.codecool.dungeoncrawl.logic.items.Health;
 import com.codecool.dungeoncrawl.logic.items.Key;
 
 import com.codecool.dungeoncrawl.logic.actors.Player;
-import com.codecool.dungeoncrawl.logic.items.Stair;
 import com.codecool.dungeoncrawl.logic.items.Sword;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.items.door.Closeddoor;
-import com.codecool.dungeoncrawl.logic.items.door.Door;
 import com.codecool.dungeoncrawl.logic.actors.Zombie;
 
 import java.io.InputStream;
@@ -18,10 +17,17 @@ public class MapLoader {
     public static GameMap loadMap(int playerOnMap) {
         InputStream is;
         if (playerOnMap == 1) {
-            is = MapLoader.class.getResourceAsStream("/map.txt");
+            is = MapLoader.class.getResourceAsStream("/map1.txt");
+        } else if (playerOnMap == 2){
+            is = MapLoader.class.getResourceAsStream("/map2.txt");
+        } else if (playerOnMap == 3){
+            is = MapLoader.class.getResourceAsStream("/map3.txt");
+        } else if (playerOnMap == 4){
+            is = MapLoader.class.getResourceAsStream("/win.txt");  ///ide tedd a WIN txt-t!!!
         } else {
-            is = MapLoader.class.getResourceAsStream("/mapTwo.txt");
+            is = MapLoader.class.getResourceAsStream("/loose.txt");
         }
+
         Scanner scanner = new Scanner(is);
         int width = scanner.nextInt();
         int height = scanner.nextInt();
@@ -79,6 +85,13 @@ public class MapLoader {
                             break;
                         case 'r':
                             cell.setType(CellType.STAIRS);
+                            break;
+                        case 'q':
+                            cell.setType(CellType.CLOSED_STAIR);
+                            break;
+                        case 'h':
+                            cell.setType(CellType.FLOOR);
+                            new Health(cell);
                             break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
