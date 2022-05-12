@@ -23,8 +23,8 @@ import java.util.HashMap;
 public class Player extends Actor {
     private ArrayList<Item> inventory;
 
-    public final int HEALTH = 10;
-    public final int ATTACK_STRENGTH = 5;
+    public static final int HEALTH = 10;
+    public static final int ATTACK_STRENGTH = 5;
     private int playerOnMap;
     private boolean changeMap = false;
 

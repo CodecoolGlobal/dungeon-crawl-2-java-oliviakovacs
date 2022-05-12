@@ -37,6 +37,7 @@ public class Main extends Application {
     Label attackStrengthLabel = new Label();
     Button pickUpButton = new Button("Pick up");
 
+
     Label playerInventory = new Label("INVENTORY: ");
 
     public static void main(String[] args) {
@@ -49,18 +50,45 @@ public class Main extends Application {
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
 
-        ui.add(new Label("Health: "), 0, 0);
-        ui.add(new Label("Attack Strength: "), 0, 1);
-        ui.add(healthLabel, 1, 0);
-        ui.add(attackStrengthLabel, 1, 1);
-        ui.add(pickUpButton, 0, 2);
+        ui.add(new Label("  "), 0, 0);
+
+        ui.add(new Label("Health: "), 0, 1);
+        ui.add(new Label("  "), 0, 2);
+        ui.add(new Label("Attack Strength: "), 0, 3);
+        ui.add(healthLabel, 1, 1);
+        ui.add(attackStrengthLabel, 1, 3);
+        ui.add(new Label("  "), 0, 4);
+
+        ui.add(pickUpButton, 0, 5);
         pickUpButton.setOnAction(mousedown -> {
             map.getPlayer().pickUpItem();
             refresh();
         });
+        ui.add(new Label("  "), 0, 6);
         pickUpButton.setFocusTraversable(false);
-        ui.add(new Label("INVENTORY:"), 0, 3);
-        ui.add(playerInventory, 0, 4);
+        ui.add(new Label("INVENTORY:"), 0, 7);
+        ui.add(playerInventory, 0, 8);
+
+        // -------------  restart game  ------------------
+        Button restartButton = new Button("Restart Game");
+        restartButton.setOnAction(mousedown -> {
+            map = MapLoader.loadMap(1);
+            map.getPlayer().setChangeMap(false);
+            map.getPlayer().setHealth(Player.HEALTH);
+            map.getPlayer().setAttackStrength(Player.ATTACK_STRENGTH);
+            map.getPlayer().setInventory(new ArrayList<Item>());
+            refresh();
+        });
+        ui.add(new Label("  "), 0, 12);
+        ui.add(new Label("  "), 0, 13);
+        ui.add(new Label("  "), 0, 14);
+        ui.add(new Label("  "), 0, 15);
+        ui.add(new Label("  "), 0, 16);
+        ui.add(new Label("  "), 0, 17);
+        ui.add(restartButton, 0, 18);
+        restartButton.setFocusTraversable(false);
+
+        // ------------  restart game end -----------------
 
         BorderPane borderPane = new BorderPane();
 
@@ -71,9 +99,6 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
-
-
-
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
@@ -107,7 +132,6 @@ public class Main extends Application {
             map.getPlayer().setPlayerOnMap(5);
             map.getPlayer().setChangeMap(true);
             refresh();
-
         }
         checkForWin();
         changeMap();
@@ -158,7 +182,6 @@ public class Main extends Application {
                 } else {
                     Tiles.drawTile(context, cell, x, y);
                 }
-
             }
             healthLabel.setText("" + map.getPlayer().getHealth());
             attackStrengthLabel.setText("" + map.getPlayer().getAttackStrength());
@@ -173,41 +196,27 @@ public class Main extends Application {
 
     public void changeMap() {
         int previousHealth = map.getPlayer().getHealth();
+        int previousAttackStrength = map.getPlayer().getAttackStrength();
         ArrayList<Item> previousInventory = map.getPlayer().getInventory();
 
         if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 1) {
             map = MapLoader.loadMap(1);
-            map.getPlayer().setChangeMap(false);
             map.getPlayer().setPlayerOnMap(2);
-            map.getPlayer().setHealth(previousHealth);
-            map.getPlayer().setInventory(previousInventory);
-
         } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 2){
             map = MapLoader.loadMap(2);
-            map.getPlayer().setChangeMap(false);
             map.getPlayer().setPlayerOnMap(2);
-            map.getPlayer().setHealth(previousHealth);
-            map.getPlayer().setInventory(previousInventory);
-
-
         } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 3){
             map = MapLoader.loadMap(3);
-            map.getPlayer().setChangeMap(false);
-            map.getPlayer().setHealth(previousHealth);
-            map.getPlayer().setInventory(previousInventory);
-
-
         }else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 4){
             map = MapLoader.loadMap(4);
-            map.getPlayer().setChangeMap(false);
-            map.getPlayer().setHealth(previousHealth);
             new SoundClipTest("winbanjo.wav");
         } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 5){
             map = MapLoader.loadMap(5);
-            map.getPlayer().setChangeMap(false);
-            map.getPlayer().setHealth(previousHealth);
             new SoundClipTest("horn-fail.wav");
-
         }
+        map.getPlayer().setChangeMap(false);
+        map.getPlayer().setHealth(previousHealth);
+        map.getPlayer().setAttackStrength(previousAttackStrength);
+        map.getPlayer().setInventory(previousInventory);
     }
 }
