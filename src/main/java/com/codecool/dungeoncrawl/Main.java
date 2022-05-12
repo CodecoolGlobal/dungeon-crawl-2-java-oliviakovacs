@@ -22,6 +22,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+
+import javax.print.attribute.standard.Media;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
@@ -70,6 +72,9 @@ public class Main extends Application {
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
 
+
+
+
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
     }
@@ -102,6 +107,7 @@ public class Main extends Application {
             map.getPlayer().setPlayerOnMap(5);
             map.getPlayer().setChangeMap(true);
             refresh();
+
         }
         checkForWin();
         changeMap();
@@ -194,9 +200,14 @@ public class Main extends Application {
         }else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 4){
             map = MapLoader.loadMap(4);
             map.getPlayer().setChangeMap(false);
+            map.getPlayer().setHealth(previousHealth);
+            new SoundClipTest("winbanjo.wav");
         } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 5){
             map = MapLoader.loadMap(5);
             map.getPlayer().setChangeMap(false);
+            map.getPlayer().setHealth(previousHealth);
+            new SoundClipTest("horn-fail.wav");
+
         }
     }
 }

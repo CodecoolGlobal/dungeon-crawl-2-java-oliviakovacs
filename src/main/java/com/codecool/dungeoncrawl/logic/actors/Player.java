@@ -1,5 +1,6 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
+import com.codecool.dungeoncrawl.SoundClipTest;
 import com.codecool.dungeoncrawl.logic.Cell;
 
 import com.codecool.dungeoncrawl.logic.CellType;
@@ -67,18 +68,21 @@ public class Player extends Actor {
 
     public void pickUpItem() {
         if (this.getCell().getItem() != null && !(this.getCell().getItem() instanceof Door)) {
+            new SoundClipTest("item-pick-up.wav");
 
             addToInventory(this.getCell().getItem());
             if (this.getCell().getItem() instanceof Sword) {
                 this.setAttackStrength(getAttackStrength()+2);
             } else if (this.getCell().getItem() instanceof Health) {
                 this.setHealth(getHealth()+3);
+                new SoundClipTest("potion-drink.wav");
+
             }
             System.out.println(inventory);
             this.getCell().setItem(null);
         }
-
     }
+
     public void tryToUnlockDoor(Cell cell, Cell nextCell){
         int counter = 0;
         for (Item item : inventory) {
@@ -87,11 +91,11 @@ public class Player extends Actor {
                 removeFromInventory(item);
                 nextCell.setType(CellType.FLOOR);
                 nextCell.setItem(new Opendoor(nextCell));
+                new SoundClipTest("keys-jingling.wav");
                 break;
             } else if (inventory.size() == counter) {       //ha nincs nála key
                 System.out.println("Key missing to open door.");
             }
-
         }
     }
 

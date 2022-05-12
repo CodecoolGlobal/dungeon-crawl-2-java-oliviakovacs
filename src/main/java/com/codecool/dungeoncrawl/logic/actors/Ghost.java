@@ -3,6 +3,9 @@ package com.codecool.dungeoncrawl.logic.actors;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.IOException;
 import java.util.Random;
 
 public class Ghost extends Actor {
@@ -15,7 +18,7 @@ public class Ghost extends Actor {
         this.setAttackStrength(ATTACK_STRENGTH);
     }
 
-    public void move() {
+    public void move()  {
         int width = this.getCell().getGameMap().getWidth();
         int currentX = this.getCell().getX();
         if (currentX == width-1) {

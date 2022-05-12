@@ -1,5 +1,6 @@
 package com.codecool.dungeoncrawl.logic;
 
+import com.codecool.dungeoncrawl.SoundClipTest;
 import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 
@@ -44,6 +45,7 @@ public class GameMap {
         for (Actor monster: monsters) {
             if (monster.getHealth()<=0) {
                 monsters.remove(monster);
+                new SoundClipTest("villain-death.wav");
                 System.out.println("One monster removed. " + monsters.size() + " left on map.");
             }
         }

@@ -1,5 +1,6 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
+import com.codecool.dungeoncrawl.SoundClipTest;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Drawable;
@@ -16,9 +17,9 @@ public abstract class Actor implements Drawable {
     }
 
     public void move(int dx, int dy) {
-
         Cell nextCell = cell.getNeighbor(dx, dy);
         if (nextCell.getType() == CellType.STAIRS) {
+            new SoundClipTest("stairs.wav");
             if (this instanceof Player) {
                 if (((Player) this).getPlayerOnMap() == 1) {
                     ((Player) this).setPlayerOnMap(2);
@@ -45,6 +46,7 @@ public abstract class Actor implements Drawable {
                 nextCell.setActor(this);
                 cell = nextCell;
             } else {                               //...if there is a monster on the cell:
+                new SoundClipTest("punch1.wav");
                 attack(this.getCell(), nextCell);
             }
         }
@@ -53,16 +55,20 @@ public abstract class Actor implements Drawable {
 
 
     public void attack(Cell cell, Cell nextCell) {
+
         Actor monsterAttacked = nextCell.getActor();
         System.out.println("FIGHT!!!! " + this.getTileName() + " attacked the " + monsterAttacked.getTileName());
         monsterAttacked.setHealth(monsterAttacked.getHealth()-this.getAttackStrength());
         if (monsterAttacked.getHealth()>0) {                     // ...if the monster survived, it fights back:
+            new SoundClipTest("punch1.wav");
             System.out.println( monsterAttacked.getTileName() + " fights back!");
             this.setHealth(this.getHealth()-monsterAttacked.getAttackStrength());
             if (this.getHealth()<=0) {                   // ...if attacker dies:
                 System.out.println("The attacker "+ this.getTileName()+ " died!");
+
                 cell.setActor(null);
             } else {                                     // ...if attacker survives:
+                new SoundClipTest("punch1.wav");
                 nextCell.setSecondActor(monsterAttacked);
                 cell.setActor(null);
                 nextCell.setActor(this);
@@ -71,6 +77,7 @@ public abstract class Actor implements Drawable {
             }
         } else {                                         // ...if the monster died:
             System.out.println("The attacked "+ monsterAttacked.getTileName() +" character was killed!");
+
             cell.setActor(null);
             nextCell.setActor(this);
             this.setCell(nextCell);
