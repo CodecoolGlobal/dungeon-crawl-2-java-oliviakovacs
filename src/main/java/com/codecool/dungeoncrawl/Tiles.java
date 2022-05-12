@@ -34,10 +34,15 @@ public class Tiles {
         tileMap.put("Sword", new Tile(0, 29));
         tileMap.put("opendoor", new Tile(9, 16));
         tileMap.put("closeddoor", new Tile(6, 16));
+        tileMap.put("stair", new Tile(2, 6));
+        tileMap.put("floortwo", new Tile(3, 0));
+        tileMap.put("walltwo", new Tile(1, 3));
         tileMap.put("stairs", new Tile(2, 6));
         tileMap.put("winTile", new Tile(8, 5));
         tileMap.put("Health", new Tile(16, 25));
         tileMap.put("closedStair", new Tile(21, 12));
+        tileMap.put("water", new Tile(8, 5));
+        tileMap.put("bridge", new Tile(4, 6));
     }
 
     public static void drawTile(GraphicsContext context, Drawable d, int x, int y) {

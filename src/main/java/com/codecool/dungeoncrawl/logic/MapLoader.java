@@ -27,7 +27,6 @@ public class MapLoader {
         } else {
             is = MapLoader.class.getResourceAsStream("/loose.txt");
         }
-
         Scanner scanner = new Scanner(is);
         int width = scanner.nextInt();
         int height = scanner.nextInt();
@@ -92,6 +91,18 @@ public class MapLoader {
                         case 'h':
                             cell.setType(CellType.FLOOR);
                             new Health(cell);
+                            break;
+                        case '-':
+                            cell.setType(CellType.FLOORTWO);
+                            break;
+                        case '>':
+                            cell.setType(CellType.WALLTWO);
+                            break;
+                        case '*':
+                            cell.setType(CellType.WATER);
+                            break;
+                        case '<':
+                            cell.setType(CellType.BRIDGE);
                             break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
