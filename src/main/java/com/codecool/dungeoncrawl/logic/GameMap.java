@@ -1,6 +1,10 @@
 package com.codecool.dungeoncrawl.logic;
 
+import com.codecool.dungeoncrawl.SoundClipTest;
+import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+
+import java.util.ArrayList;
 
 public class GameMap {
     private int width;
@@ -8,6 +12,8 @@ public class GameMap {
     private Cell[][] cells;
 
     private Player player;
+    private ArrayList<Actor> monsters = new ArrayList<>();
+    private String name;
 
     public GameMap(int width, int height, CellType defaultCellType) {
         this.width = width;
@@ -30,6 +36,24 @@ public class GameMap {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public void addMonsterToMap(Actor monster) {
+        monsters.add(monster);
+    }
+
+    public void removeDeadMonsters(){
+        for (Actor monster: monsters) {
+            if (monster.getHealth()<=0) {
+                monsters.remove(monster);
+                new SoundClipTest("villain-death.wav");
+                System.out.println("One monster removed. " + monsters.size() + " left on map.");
+            }
+        }
+    }
+
+    public ArrayList<Actor> getMonsters() {
+        return monsters;
     }
 
     public int getWidth() {
