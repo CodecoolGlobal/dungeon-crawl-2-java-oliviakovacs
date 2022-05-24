@@ -2,10 +2,8 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.SoundClipTest;
 import com.codecool.dungeoncrawl.logic.Cell;
-import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.Drawable;
 import com.codecool.dungeoncrawl.logic.CellType;
-import com.codecool.dungeoncrawl.logic.Drawable;
 import com.codecool.dungeoncrawl.logic.items.door.Closeddoor;
 
 public abstract class Actor implements Drawable {
@@ -38,7 +36,7 @@ public abstract class Actor implements Drawable {
             ((Player) cell.getActor()).tryToUnlockDoor(cell, nextCell);
         }
 
-        if(nextCell.getType() == CellType.FLOOR || nextCell.getType() == CellType.FLOORTHREE || nextCell.getType() == CellType.TOWER || nextCell.getType() == CellType.BRIDGE || nextCell.getType() == CellType.FLOORTWO || nextCell.getType() == CellType.STAIRS || nextCell.getType() == CellType.WIN_TILE){
+        if(nextCell.getType() == CellType.FLOOR || nextCell.getType() == CellType.FLOORTHREE || nextCell.getType() == CellType.TOWER || nextCell.getType() == CellType.BRIDGE || nextCell.getType() == CellType.FLOOR_GRASS || nextCell.getType() == CellType.STAIRS || nextCell.getType() == CellType.WIN_TILE){
             if (nextCell.getActor() == null) {
                 if (cell.getSecondActor() != null) {
                     if (cell.getSecondActor() instanceof Skeleton) {

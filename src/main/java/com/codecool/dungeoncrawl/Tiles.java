@@ -35,8 +35,9 @@ public class Tiles {
         tileMap.put("opendoor", new Tile(9, 16));
         tileMap.put("closeddoor", new Tile(6, 16));
         tileMap.put("stair", new Tile(2, 6));
-        tileMap.put("floortwo", new Tile(3, 0));
-        tileMap.put("walltwo", new Tile(1, 3));
+        tileMap.put("floor_grass", new Tile(5, 0)); //(3,0)
+        tileMap.put("rocks", new Tile(5, 2));   //(1,3)
+        tileMap.put("trees", new Tile(3, 1));
         tileMap.put("stairs", new Tile(2, 6));
         tileMap.put("winTile", new Tile(8, 5));
         tileMap.put("Health", new Tile(16, 25));

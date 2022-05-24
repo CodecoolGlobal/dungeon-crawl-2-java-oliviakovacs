@@ -1,7 +1,5 @@
 package com.codecool.dungeoncrawl.logic;
 
-import com.sun.java.accessibility.util.TopLevelWindowListener;
-
 public enum CellType {
     EMPTY("empty"),
     FLOOR("floor"),
@@ -11,8 +9,9 @@ public enum CellType {
     CLOSED_STAIR("closedStair"),
     OPENDOOR("opendoor"),
     CLOSEDDOOR("closeddoor"),
-    FLOORTWO("floortwo"),
-    WALLTWO("walltwo"),
+    FLOOR_GRASS("floor_grass"),
+    ROCKS("rocks"),
+    TREES("trees"),
     WATER("water"),
     BRIDGE("bridge"),
     ROOF("roof"),

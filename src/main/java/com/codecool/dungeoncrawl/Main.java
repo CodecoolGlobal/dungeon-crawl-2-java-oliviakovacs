@@ -44,8 +44,7 @@ public class Main extends Application {
     Canvas canvas = new Canvas(
             CANVAS_SIZE * Tiles.TILE_WIDTH,
             CANVAS_SIZE * Tiles.TILE_WIDTH);
-//            map.getWidth() * Tiles.TILE_WIDTH,
-//            map.getHeight() * Tiles.TILE_WIDTH);
+
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
     Label attackStrengthLabel = new Label();
@@ -206,31 +205,7 @@ public class Main extends Application {
         }
     }
 
-//    private void refresh() {
-//        int minX = map.getCenterCell().getX() - CANVAS_SIZE/2;
-//        int minY = map.getCenterCell().getY() - CANVAS_SIZE/2;
-//        int maxX = map.getCenterCell().getX() + CANVAS_SIZE/2;
-//        int maxY = map.getCenterCell().getY() + CANVAS_SIZE/2;
-//        context.setFill(Color.BLACK);
-//        context.fillRect(0, 0, 20, 20);
-//        for (int x = minX; x <= maxX; x++) {
-//            for (int y = minY; y <= maxY; y++) {
-//                Cell cell = map.getCell(x, y);
-//                if (cell.getActor() != null) {
-//                    Tiles.drawTile(context, cell.getActor(), x-minX, y-minY);
-//                } else if (cell.getItem() != null) {
-//                    Tiles.drawTile(context, cell.getItem(), x-minX, y-minY);
-//                }else {
-//                    Tiles.drawTile(context, cell, x-minX, y-minY);
-//
-//                }
-//            }
-//        }
-//        healthLabel.setText("Health:  " + map.getPlayer().getHealth() + "/" + map.getPlayer().getMaxHealth());
-//        damageLabel.setText("Damage:  " + map.getPlayer().getActual_damage());
-//        inventory.setText(map.getPlayer().getItemInventory().toString());
-//        //stepSound();
-//    }
+
 
     private void refresh() {
         int minX = map.getCenterCell().getX() - CANVAS_SIZE/2;
@@ -240,8 +215,6 @@ public class Main extends Application {
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-
-        System.out.println("centerCell x: " + map.getCenterCell().getX() + ", y: " +  map.getCenterCell().getY());
         for (int x = minX; x < maxX; x++) {
             for (int y = minY; y < maxY; y++) {
                 Cell cell = map.getCell(x, y);

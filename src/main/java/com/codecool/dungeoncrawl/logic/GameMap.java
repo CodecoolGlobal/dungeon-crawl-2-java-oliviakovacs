@@ -25,12 +25,6 @@ public class GameMap {
                 cells[x][y] = new Cell(this, x, y, defaultCellType);
             }
         }
-
-//        for (int x = centerCell.getX()-10 ; x < centerCell.getX()+10; x++) {
-//            for (int y = centerCell.getY()-10; y < centerCell.getY()+10; y++) {
-//                cells[x][y] = new Cell(this, x, y, defaultCellType);
-//            }
-//        }
     }
 
     public Cell getCell(int x, int y) {

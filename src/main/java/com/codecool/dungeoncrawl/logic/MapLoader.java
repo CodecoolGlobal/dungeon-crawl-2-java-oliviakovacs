@@ -95,10 +95,10 @@ public class MapLoader {
                             new Health(cell);
                             break;
                         case '-':
-                            cell.setType(CellType.FLOORTWO);
+                            cell.setType(CellType.FLOOR_GRASS);
                             break;
                         case '&':
-                            cell.setType(CellType.WALLTWO);
+                            cell.setType(CellType.ROCKS);
                             break;
                         case '*':
                             cell.setType(CellType.WATER);
@@ -117,6 +117,9 @@ public class MapLoader {
                             break;
                         case ',':
                             cell.setType(CellType.FLOORTHREE);
+                            break;
+                        case 'T':
+                            cell.setType(CellType.TREES);
                             break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
