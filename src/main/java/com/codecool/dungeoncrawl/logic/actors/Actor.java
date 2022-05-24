@@ -43,15 +43,18 @@ public abstract class Actor implements Drawable {
                     } else {
                         cell.setActor(cell.getSecondActor());
                     }
-                    cell.setSecondActor(null);
+                    if (this != this.getCell().getSecondActor()) {
+                        this.getCell().setActor(this.getCell().getSecondActor());
+                    }
+                    this.getCell().setSecondActor(null);
                 } else {
                     cell.setActor(null);
                 }
                 nextCell.setActor(this);
-                this.cell = nextCell;
+                cell = nextCell;
             } else {                               //...if there is a monster on the cell:
                 new SoundClipTest("punch1.wav");
-                attack(this.getCell(), nextCell);
+                attack(cell, nextCell);
             }
         }
     }

@@ -10,6 +10,7 @@ public class GameMap {
     private int width;
     private int height;
     private Cell[][] cells;
+    Cell centerCell;
 
     private Player player;
     private ArrayList<Actor> monsters = new ArrayList<>();
@@ -23,6 +24,12 @@ public class GameMap {
                 cells[x][y] = new Cell(this, x, y, defaultCellType);
             }
         }
+
+//        for (int x = centerCell.getX()-10 ; x < centerCell.getX()+10; x++) {
+//            for (int y = centerCell.getY()-10; y < centerCell.getY()+10; y++) {
+//                cells[x][y] = new Cell(this, x, y, defaultCellType);
+//            }
+//        }
     }
 
     public Cell getCell(int x, int y) {
@@ -31,6 +38,7 @@ public class GameMap {
 
     public void setPlayer(Player player) {
         this.player = player;
+        repositionCenter();
     }
 
     public Player getPlayer() {
@@ -61,5 +69,28 @@ public class GameMap {
 
     public int getHeight() {
         return height;
+    }
+
+    public void repositionCenter(){
+        int centerX;
+        int centerY;
+
+        if (player.getCell().getX() <= 10) {
+            centerX = 10;
+        } else {
+            centerX = Math.min(player.getCell().getX(), width - 11);
+        }
+
+        if (player.getCell().getY() <= 10) {
+            centerY = 10;
+        } else {
+            centerY = Math.min(player.getCell().getY(), height - 11);
+        }
+
+        centerCell = cells[centerX][centerY];
+    }
+
+    public Cell getCenterCell() {
+        return centerCell;
     }
 }

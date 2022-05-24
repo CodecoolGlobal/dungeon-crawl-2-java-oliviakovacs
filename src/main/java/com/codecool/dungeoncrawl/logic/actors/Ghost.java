@@ -41,7 +41,9 @@ public class Ghost extends Actor {
 
             if (nextCell.getActor() == null) {
                 if (this.getCell().getSecondActor() != null) {
-                    this.getCell().setActor(this.getCell().getSecondActor());
+                    if (this != this.getCell().getSecondActor()) {
+                        this.getCell().setActor(this.getCell().getSecondActor());
+                    }
                     this.getCell().setSecondActor(null);
                 } else {
                     this.getCell().setActor(null);
