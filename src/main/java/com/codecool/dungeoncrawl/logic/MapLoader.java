@@ -117,6 +117,7 @@ public class MapLoader {
                             break;
                         case ',':
                             cell.setType(CellType.FLOORTHREE);
+                            break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
                     }
