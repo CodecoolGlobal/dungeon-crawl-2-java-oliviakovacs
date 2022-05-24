@@ -39,10 +39,13 @@ import java.sql.SQLException;
 
 
 public class Main extends Application {
+    int CANVAS_SIZE = 20;
     GameMap map = MapLoader.loadMap(1);
     Canvas canvas = new Canvas(
-            map.getWidth() * Tiles.TILE_WIDTH,
-            map.getHeight() * Tiles.TILE_WIDTH);
+            CANVAS_SIZE * Tiles.TILE_WIDTH,
+            CANVAS_SIZE * Tiles.TILE_WIDTH);
+//            map.getWidth() * Tiles.TILE_WIDTH,
+//            map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
     Label attackStrengthLabel = new Label();
@@ -132,25 +135,33 @@ public class Main extends Application {
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
+                refresh();
                 monstersAct(map);
                 refresh();
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
+                refresh();
                 monstersAct(map);
                 refresh();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
+                refresh();
                 monstersAct(map);
                 refresh();
                 break;
             case RIGHT:
                 map.getPlayer().move(1, 0);
+                refresh();
                 monstersAct(map);
                 refresh();
                 break;
         }
+
+        map.repositionCenter();
+        monstersAct(map);
+
         if (isPlayerDead(map.getPlayer())) {
             System.out.println("---------------Here the game will be stopped!!!-------------");
             map.getPlayer().setPlayerOnMap(5);
@@ -195,18 +206,51 @@ public class Main extends Application {
         }
     }
 
+//    private void refresh() {
+//        int minX = map.getCenterCell().getX() - CANVAS_SIZE/2;
+//        int minY = map.getCenterCell().getY() - CANVAS_SIZE/2;
+//        int maxX = map.getCenterCell().getX() + CANVAS_SIZE/2;
+//        int maxY = map.getCenterCell().getY() + CANVAS_SIZE/2;
+//        context.setFill(Color.BLACK);
+//        context.fillRect(0, 0, 20, 20);
+//        for (int x = minX; x <= maxX; x++) {
+//            for (int y = minY; y <= maxY; y++) {
+//                Cell cell = map.getCell(x, y);
+//                if (cell.getActor() != null) {
+//                    Tiles.drawTile(context, cell.getActor(), x-minX, y-minY);
+//                } else if (cell.getItem() != null) {
+//                    Tiles.drawTile(context, cell.getItem(), x-minX, y-minY);
+//                }else {
+//                    Tiles.drawTile(context, cell, x-minX, y-minY);
+//
+//                }
+//            }
+//        }
+//        healthLabel.setText("Health:  " + map.getPlayer().getHealth() + "/" + map.getPlayer().getMaxHealth());
+//        damageLabel.setText("Damage:  " + map.getPlayer().getActual_damage());
+//        inventory.setText(map.getPlayer().getItemInventory().toString());
+//        //stepSound();
+//    }
+
     private void refresh() {
+        int minX = map.getCenterCell().getX() - CANVAS_SIZE/2;
+        int minY = map.getCenterCell().getY() - CANVAS_SIZE/2;
+        int maxX = map.getCenterCell().getX() + CANVAS_SIZE/2;
+        int maxY = map.getCenterCell().getY() + CANVAS_SIZE/2;
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        for (int x = 0; x < map.getWidth(); x++) {
-            for (int y = 0; y < map.getHeight(); y++) {
+
+
+        System.out.println("centerCell x: " + map.getCenterCell().getX() + ", y: " +  map.getCenterCell().getY());
+        for (int x = minX; x < maxX; x++) {
+            for (int y = minY; y < maxY; y++) {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
-                    Tiles.drawTile(context, cell.getActor(), x, y);
+                    Tiles.drawTile(context, cell.getActor(), x-minX, y-minY);
                 } else if (cell.getItem() != null) {
-                    Tiles.drawTile(context, cell.getItem(), x, y);
+                    Tiles.drawTile(context, cell.getItem(), x-minX, y-minY);
                 } else {
-                    Tiles.drawTile(context, cell, x, y);
+                    Tiles.drawTile(context, cell, x-minX, y-minY);
                 }
             }
             healthLabel.setText("" + map.getPlayer().getHealth());
