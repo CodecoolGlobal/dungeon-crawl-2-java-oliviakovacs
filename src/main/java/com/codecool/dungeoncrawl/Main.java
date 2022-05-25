@@ -11,6 +11,8 @@ import com.codecool.dungeoncrawl.logic.actors.Ghost;
 import com.codecool.dungeoncrawl.logic.actors.Zombie;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
+import com.codecool.dungeoncrawl.logic.items.Key;
+import com.codecool.dungeoncrawl.logic.items.Sword;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -26,10 +28,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
+import java.util.*;
 import java.sql.SQLException;
-import java.util.Optional;
+
+import java.lang.Throwable;
 
 
 public class Main extends Application {
@@ -44,9 +46,10 @@ public class Main extends Application {
     Button pickUpButton = new Button("Pick up");
 
 
+
     Label playerInventory = new Label("INVENTORY: ");
     GameDatabaseManager dbManager;
-    PlayerDao playerDao;
+    //PlayerDao playerDao;
 
     public static void main(String[] args) {
         launch(args);
@@ -55,7 +58,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         setupDbManager();
-        playerDao = dbManager.getPlayerDao();
+        //playerDao = dbManager.getPlayerDao();
         GridPane ui = new GridPane();
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
@@ -80,6 +83,19 @@ public class Main extends Application {
         ui.add(new Label("INVENTORY:"), 0, 7);
         ui.add(playerInventory, 0, 8);
 
+        // -------------  load game  ------------------
+        Button loadButton = new Button("Load");
+        ui.add(loadButton, 0, 16);
+        loadButton.setOnAction(mousedown -> {
+            showGetNameModalForGameLoad();
+            refresh();
+        });
+
+        loadButton.setFocusTraversable(false);
+
+        // -------------  load game end ------------------
+
+
         // -------------  restart game  ------------------
         Button restartButton = new Button("Restart Game");
         restartButton.setOnAction(mousedown -> {
@@ -95,7 +111,7 @@ public class Main extends Application {
         ui.add(new Label("  "), 0, 14);
         ui.add(new Label("  "), 0, 15);
         //ui.add(new Label("Map:"), 0, 16);
-        ui.add(new Label("  "), 0, 16);
+        //ui.add(new Label("  "), 0, 16);
         ui.add(new Label("  "), 0, 17);
         ui.add(restartButton, 0, 18);
         restartButton.setFocusTraversable(false);
@@ -150,13 +166,10 @@ public class Main extends Application {
                 map.getPlayer().move(1, 0);
                 refresh();
                 break;
-            case S:
-                Player player = map.getPlayer();
-                //if player name is in db:
-                dbManager.savePlayer(player);
-                //else:
-                //dbManager.updatePlayer(player);
-                break;
+//            case S:
+//                Player player = map.getPlayer();
+//                dbManager.savePlayer(player);
+//                break;
         }
 
         map.repositionCenter();
@@ -292,7 +305,10 @@ public class Main extends Application {
         Button cancelButton = new Button("Cancel");
         Button saveButton = new Button("Save");
         cancelButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> stage.close());
-        saveButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> savePlayerInDb(saveButton, textField.getText()));
+        saveButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+            savePlayerInDb(saveButton, textField.getText());
+            stage.close();
+        });
         gridPane.setHgap(60);
         gridPane.setVgap(30);
         gridPane.add(saveGameName, 2, 2);
@@ -305,32 +321,83 @@ public class Main extends Application {
         stage.show();
     }
 
-    private void confirmDialog() {
+    private void confirmDialog(Player player) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
         alert.setHeaderText("Name already exists");
         alert.setContentText("Would you like to overwrite?");
-        alert.show();
+        //alert.show();
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
-//            dbManager.updatePlayer();
+            dbManager.updatePlayer(player);
+            alert.close();
         } else {
             alert.close();
         }
     }
 
     public void savePlayerInDb(Button saveButton, String name) {
-        Integer playerId = playerDao.GetPlayerIdByName(name);
+        //Integer playerId = playerDao.GetPlayerIdByName(name);
+        Integer playerId = dbManager.getPlayerIdByNameManager(name);
 //        System.out.println(resultSet);
         System.out.println(playerId);
+        Player player = map.getPlayer();
+        player.setName(name);
+        System.out.println("player name: :" + player.getName());
         if (playerId == null) {
-            Player player = map.getPlayer();
-            player.setName(name);
             dbManager.savePlayer(player);
         } else {
-            confirmDialog();
+            confirmDialog(player);
         }
+    }
+
+    public void loadGame(String chosenName){
+       HashMap playerDictionary = dbManager.getPlayerByName(chosenName);
+       Player player = map.getPlayer();
+       player.setHealth((int) playerDictionary.get("hp"));
+       player.getCell().setX((int) playerDictionary.get("x"));
+       player.getCell().setX((int) playerDictionary.get("y"));
+       player.setAttackStrength((int) playerDictionary.get("attack_strength"));
+       for (int i=0; i<(int) playerDictionary.get("sword"); i++) {
+           player.addToInventory(new Sword(new Cell(map, 0, 0, CellType.FLOOR)));
+       }
+       for (int i=0; i<(int) playerDictionary.get("key"); i++) {
+           player.addToInventory(new Key(new Cell(map, 0, 0, CellType.FLOOR)));
+       }
+    }
+
+    private void showGetNameModalForGameLoad() {
+        ArrayList<String> names = dbManager.getAllNames();
+        System.out.println("Names from db : " +names);
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.setTitle("Load Game");
+        Label loadGameName = new Label("Name:");
+        TextField textField = new TextField();
+        GridPane gridPane = new GridPane();
+        Button cancelButton = new Button("Cancel");
+        Button loadButton = new Button("Load Game");
+        cancelButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> stage.close());
+
+        loadButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+            String chosenName = textField.getText();
+            loadGame(chosenName);
+            refresh();
+            System.out.println("Clicked the load button");
+            stage.close();
+        });
+        gridPane.setHgap(60);
+        gridPane.setVgap(30);
+        gridPane.add(loadGameName, 2, 2);
+        gridPane.add(textField, 3, 2);
+        gridPane.add(cancelButton, 4, 4);
+        gridPane.add(loadButton, 2, 4);
+        stage.setWidth(600);
+        stage.setHeight(300);
+        stage.setScene(new Scene(gridPane));
+        stage.show();
     }
 
 }

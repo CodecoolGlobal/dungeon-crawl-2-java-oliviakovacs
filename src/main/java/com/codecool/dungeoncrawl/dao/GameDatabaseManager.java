@@ -6,6 +6,8 @@ import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GameDatabaseManager {
     private PlayerDao playerDao;
@@ -25,11 +27,27 @@ public class GameDatabaseManager {
         playerDao.update(model);
     }
 
+    public Integer getPlayerIdByNameManager(String name) {
+        System.out.println("im in dbmanager get player id");
+        Integer playerId = playerDao.getPlayerIdByName(name);
+        return playerId;
+    }
+
+    public ArrayList<String> getAllNames() {
+        ArrayList<String> names = playerDao.getAllNames();
+        return names;
+    }
+
+    public HashMap getPlayerByName(String name) {
+        HashMap playerDictionary = playerDao.getPlayerByName(name);
+        return playerDictionary;
+    }
+
     private DataSource connect() throws SQLException {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
-        String dbName = "test";
-        String user = "test";
-        String password = "test";
+        String dbName = "dungeoncrawl";
+        String user = "wildzebra";
+        String password = "aaaa";
 
         dataSource.setDatabaseName(dbName);
         dataSource.setUser(user);
@@ -45,4 +63,6 @@ public class GameDatabaseManager {
     public PlayerDao getPlayerDao() {
         return playerDao;
     }
+
+
 }

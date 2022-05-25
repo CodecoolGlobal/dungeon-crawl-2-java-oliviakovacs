@@ -2,7 +2,8 @@ package com.codecool.dungeoncrawl.dao;
 
 import com.codecool.dungeoncrawl.model.PlayerModel;
 
-import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public interface PlayerDao {
@@ -10,5 +11,7 @@ public interface PlayerDao {
     void update(PlayerModel player);
     PlayerModel get(int id);
     List<PlayerModel> getAll();
-    Integer GetPlayerIdByName(String name);
+    Integer getPlayerIdByName(String name);
+    ArrayList<String> getAllNames();
+    HashMap getPlayerByName(String name);
 }
