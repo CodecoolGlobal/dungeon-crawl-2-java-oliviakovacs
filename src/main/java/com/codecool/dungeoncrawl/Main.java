@@ -48,6 +48,7 @@ public class Main extends Application {
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
     Label attackStrengthLabel = new Label();
+    //Label mapLabel = new Label();
     Button pickUpButton = new Button("Pick up");
 
 
@@ -72,6 +73,7 @@ public class Main extends Application {
         ui.add(new Label("Attack Strength: "), 0, 3);
         ui.add(healthLabel, 1, 1);
         ui.add(attackStrengthLabel, 1, 3);
+        //ui.add(mapLabel, 1, 16);
         ui.add(new Label("  "), 0, 4);
 
         ui.add(pickUpButton, 0, 5);
@@ -98,6 +100,7 @@ public class Main extends Application {
         ui.add(new Label("  "), 0, 13);
         ui.add(new Label("  "), 0, 14);
         ui.add(new Label("  "), 0, 15);
+        //ui.add(new Label("Map:"), 0, 16);
         ui.add(new Label("  "), 0, 16);
         ui.add(new Label("  "), 0, 17);
         ui.add(restartButton, 0, 18);
@@ -135,26 +138,25 @@ public class Main extends Application {
             case UP:
                 map.getPlayer().move(0, -1);
                 refresh();
-                monstersAct(map);
-                refresh();
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
-                refresh();
-                monstersAct(map);
                 refresh();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
                 refresh();
-                monstersAct(map);
-                refresh();
                 break;
             case RIGHT:
                 map.getPlayer().move(1, 0);
                 refresh();
-                monstersAct(map);
-                refresh();
+                break;
+            case S:
+                Player player = map.getPlayer();
+                //if player name is in db:
+                dbManager.savePlayer(player);
+                //else:
+                //dbManager.updatePlayer(player);
                 break;
         }
 
@@ -183,6 +185,7 @@ public class Main extends Application {
                 ((Zombie) monster).move();
             } else if (monster instanceof Ghost) {
                 ((Ghost) monster).move();
+                ((Ghost) monster).move();
             }
         }
     }
@@ -200,8 +203,6 @@ public class Main extends Application {
             map.getPlayer().setChangeMap(true);
             map.getPlayer().setPlayerOnMap(4);
             refresh();
-//                Player player = map.getPlayer();
-//                dbManager.savePlayer(player);
         }
     }
 
@@ -228,6 +229,7 @@ public class Main extends Application {
             }
             healthLabel.setText("" + map.getPlayer().getHealth());
             attackStrengthLabel.setText("" + map.getPlayer().getAttackStrength());
+            //mapLabel.setText("" + map.getPlayer().getPlayerOnMap());
             playerInventory.setText("");
             playerInventory.setText(map.getPlayer().displayInventory());
 

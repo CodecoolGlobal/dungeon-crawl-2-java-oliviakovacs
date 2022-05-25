@@ -20,11 +20,16 @@ public class GameDatabaseManager {
         playerDao.add(model);
     }
 
+    public void updatePlayer(Player player) {
+        PlayerModel model = new PlayerModel(player);
+        playerDao.update(model);
+    }
+
     private DataSource connect() throws SQLException {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
-        String dbName = "test";
-        String user = "test";
-        String password = "test";
+        String dbName = "dungeoncrawl";
+        String user = "wildzebra";
+        String password = "aaaa";
 
         dataSource.setDatabaseName(dbName);
         dataSource.setUser(user);
