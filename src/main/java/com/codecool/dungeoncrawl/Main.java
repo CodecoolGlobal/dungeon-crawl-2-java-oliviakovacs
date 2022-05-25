@@ -121,14 +121,16 @@ public class Main extends Application {
     private void onKeyReleased(KeyEvent keyEvent) {
         KeyCombination exitCombinationMac = new KeyCodeCombination(KeyCode.W, KeyCombination.SHORTCUT_DOWN);
         KeyCombination exitCombinationWin = new KeyCodeCombination(KeyCode.F4, KeyCombination.ALT_DOWN);
-        KeyCombination save = new KeyCodeCombination(KeyCode.S, KeyCombination.META_DOWN);
+        KeyCombination saveMac = new KeyCodeCombination(KeyCode.S, KeyCombination.META_DOWN);
+        KeyCombination saveWin = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+
 
         if (exitCombinationMac.match(keyEvent)
                 || exitCombinationWin.match(keyEvent)
                 || keyEvent.getCode() == KeyCode.ESCAPE) {
             exit();
         }
-        else if(save.match(keyEvent)){
+        else if(saveMac.match(keyEvent) || saveWin.match(keyEvent)){
             showModal();
         }
     }
