@@ -18,8 +18,7 @@ public class PlayerDaoJdbc implements PlayerDao {
         try (Connection conn = dataSource.getConnection()) {
             String sql = "INSERT INTO player (player_name, hp, x, y, attack_strength, sword, key) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            //statement.setString(1, player.getPlayerName());
-            statement.setString(1, "Test Name");
+            statement.setString(1, player.getPlayerName());
             statement.setInt(2, player.getHp());
             statement.setInt(3, player.getX());
             statement.setInt(4, player.getY());
@@ -66,6 +65,20 @@ public class PlayerDaoJdbc implements PlayerDao {
     @Override
     public List<PlayerModel> getAll() {
         return null;
+    }
+    public Integer GetPlayerIdByName(String name){
+        try (Connection conn = dataSource.getConnection()) {
+            String sql = "SELECT id FROM player WHERE player_name LIKE ?";
+            PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, name);
+            ResultSet resultSet = statement.executeQuery();
+            if (!resultSet.next()) {
+                return null;
+            }
+            return resultSet.getInt(1);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

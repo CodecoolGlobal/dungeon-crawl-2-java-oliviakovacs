@@ -1,5 +1,6 @@
 package com.codecool.dungeoncrawl;
 
+import com.codecool.dungeoncrawl.dao.PlayerDao;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
@@ -10,40 +11,31 @@ import com.codecool.dungeoncrawl.logic.actors.Ghost;
 import com.codecool.dungeoncrawl.logic.actors.Zombie;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
-import com.codecool.dungeoncrawl.logic.Cell;
-import com.codecool.dungeoncrawl.logic.GameMap;
-import com.codecool.dungeoncrawl.logic.MapLoader;
-import com.codecool.dungeoncrawl.logic.actors.Player;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
-import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 
-import javax.print.attribute.standard.Media;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.sql.SQLException;
+import java.util.Optional;
 
 
 public class Main extends Application {
     int CANVAS_SIZE = 20;
     GameMap map = MapLoader.loadMap(1);
-    Canvas canvas = new Canvas(
-            CANVAS_SIZE * Tiles.TILE_WIDTH,
-            CANVAS_SIZE * Tiles.TILE_WIDTH);
+    Canvas canvas = new Canvas(CANVAS_SIZE * Tiles.TILE_WIDTH, CANVAS_SIZE * Tiles.TILE_WIDTH);
 
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
@@ -54,6 +46,7 @@ public class Main extends Application {
 
     Label playerInventory = new Label("INVENTORY: ");
     GameDatabaseManager dbManager;
+    PlayerDao playerDao;
 
     public static void main(String[] args) {
         launch(args);
@@ -62,6 +55,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         setupDbManager();
+        playerDao = dbManager.getPlayerDao();
         GridPane ui = new GridPane();
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
@@ -126,10 +120,15 @@ public class Main extends Application {
     private void onKeyReleased(KeyEvent keyEvent) {
         KeyCombination exitCombinationMac = new KeyCodeCombination(KeyCode.W, KeyCombination.SHORTCUT_DOWN);
         KeyCombination exitCombinationWin = new KeyCodeCombination(KeyCode.F4, KeyCombination.ALT_DOWN);
-        if (exitCombinationMac.match(keyEvent)
-                || exitCombinationWin.match(keyEvent)
-                || keyEvent.getCode() == KeyCode.ESCAPE) {
+        KeyCombination saveMac = new KeyCodeCombination(KeyCode.S, KeyCombination.META_DOWN);
+        KeyCombination saveWin = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+
+
+        if (exitCombinationMac.match(keyEvent) || exitCombinationWin.match(keyEvent) || keyEvent.getCode() == KeyCode.ESCAPE) {
             exit();
+        } else if (saveMac.match(keyEvent) || saveWin.match(keyEvent)) {
+            showModal();
+
         }
     }
 
@@ -177,7 +176,7 @@ public class Main extends Application {
     public void monstersAct(GameMap map) {
         try {
             map.removeDeadMonsters();
-        } catch (ConcurrentModificationException e){
+        } catch (ConcurrentModificationException e) {
             System.out.println("No monsters on map.");
         }
         for (Actor monster : map.getMonsters()) {
@@ -207,12 +206,11 @@ public class Main extends Application {
     }
 
 
-
     private void refresh() {
-        int minX = map.getCenterCell().getX() - CANVAS_SIZE/2;
-        int minY = map.getCenterCell().getY() - CANVAS_SIZE/2;
-        int maxX = map.getCenterCell().getX() + CANVAS_SIZE/2;
-        int maxY = map.getCenterCell().getY() + CANVAS_SIZE/2;
+        int minX = map.getCenterCell().getX() - CANVAS_SIZE / 2;
+        int minY = map.getCenterCell().getY() - CANVAS_SIZE / 2;
+        int maxX = map.getCenterCell().getX() + CANVAS_SIZE / 2;
+        int maxY = map.getCenterCell().getY() + CANVAS_SIZE / 2;
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
@@ -220,11 +218,11 @@ public class Main extends Application {
             for (int y = minY; y < maxY; y++) {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
-                    Tiles.drawTile(context, cell.getActor(), x-minX, y-minY);
+                    Tiles.drawTile(context, cell.getActor(), x - minX, y - minY);
                 } else if (cell.getItem() != null) {
-                    Tiles.drawTile(context, cell.getItem(), x-minX, y-minY);
+                    Tiles.drawTile(context, cell.getItem(), x - minX, y - minY);
                 } else {
-                    Tiles.drawTile(context, cell, x-minX, y-minY);
+                    Tiles.drawTile(context, cell, x - minX, y - minY);
                 }
             }
             healthLabel.setText("" + map.getPlayer().getHealth());
@@ -247,15 +245,15 @@ public class Main extends Application {
         if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 1) {
             map = MapLoader.loadMap(1);
             map.getPlayer().setPlayerOnMap(2);
-        } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 2){
+        } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 2) {
             map = MapLoader.loadMap(2);
             map.getPlayer().setPlayerOnMap(2);
-        } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 3){
+        } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 3) {
             map = MapLoader.loadMap(3);
-        }else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 4){
+        } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 4) {
             map = MapLoader.loadMap(4);
             new SoundClipTest("winbanjo.wav");
-        } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 5){
+        } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 5) {
             map = MapLoader.loadMap(5);
             new SoundClipTest("horn-fail.wav");
         }
@@ -263,7 +261,7 @@ public class Main extends Application {
         map.getPlayer().setHealth(previousHealth);
         map.getPlayer().setAttackStrength(previousAttackStrength);
         map.getPlayer().setInventory(previousInventory);
-        }
+    }
 
 
     private void setupDbManager() {
@@ -283,4 +281,57 @@ public class Main extends Application {
         }
         System.exit(0);
     }
+
+    private void showModal() {
+        Stage stage = new Stage();
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.setTitle("Save Game");
+        Label saveGameName = new Label("Name:");
+        TextField textField = new TextField();
+        GridPane gridPane = new GridPane();
+        Button cancelButton = new Button("Cancel");
+        Button saveButton = new Button("Save");
+        cancelButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> stage.close());
+        saveButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> savePlayerInDb(saveButton, textField.getText()));
+        gridPane.setHgap(60);
+        gridPane.setVgap(30);
+        gridPane.add(saveGameName, 2, 2);
+        gridPane.add(textField, 3, 2);
+        gridPane.add(cancelButton, 4, 4);
+        gridPane.add(saveButton, 2, 4);
+        stage.setWidth(600);
+        stage.setHeight(300);
+        stage.setScene(new Scene(gridPane));
+        stage.show();
+    }
+
+    private void confirmDialog() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation");
+        alert.setHeaderText("Name already exists");
+        alert.setContentText("Would you like to overwrite?");
+        alert.show();
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+//            dbManager.updatePlayer();
+        } else {
+            alert.close();
+        }
+    }
+
+    public void savePlayerInDb(Button saveButton, String name) {
+        Integer playerId = playerDao.GetPlayerIdByName(name);
+//        System.out.println(resultSet);
+        System.out.println(playerId);
+        if (playerId == null) {
+            Player player = map.getPlayer();
+            player.setName(name);
+            dbManager.savePlayer(player);
+        } else {
+            confirmDialog();
+        }
+    }
+
 }
+

@@ -27,9 +27,9 @@ public class GameDatabaseManager {
 
     private DataSource connect() throws SQLException {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
-        String dbName = "dungeoncrawl";
-        String user = "wildzebra";
-        String password = "aaaa";
+        String dbName = "test";
+        String user = "test";
+        String password = "test";
 
         dataSource.setDatabaseName(dbName);
         dataSource.setUser(user);
@@ -40,5 +40,9 @@ public class GameDatabaseManager {
         System.out.println("Connection ok.");
 
         return dataSource;
+    }
+
+    public PlayerDao getPlayerDao() {
+        return playerDao;
     }
 }
