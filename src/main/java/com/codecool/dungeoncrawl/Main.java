@@ -19,16 +19,13 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
-import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 
@@ -36,6 +33,7 @@ import javax.print.attribute.standard.Media;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.sql.SQLException;
+import java.util.Optional;
 
 
 public class Main extends Application {
@@ -124,10 +122,15 @@ public class Main extends Application {
     private void onKeyReleased(KeyEvent keyEvent) {
         KeyCombination exitCombinationMac = new KeyCodeCombination(KeyCode.W, KeyCombination.SHORTCUT_DOWN);
         KeyCombination exitCombinationWin = new KeyCodeCombination(KeyCode.F4, KeyCombination.ALT_DOWN);
+        KeyCombination save = new KeyCodeCombination(KeyCode.S, KeyCombination.META_DOWN);
+
         if (exitCombinationMac.match(keyEvent)
                 || exitCombinationWin.match(keyEvent)
                 || keyEvent.getCode() == KeyCode.ESCAPE) {
             exit();
+        }
+        else if(save.match(keyEvent)){
+            showModal();
         }
     }
 
@@ -308,4 +311,43 @@ public class Main extends Application {
         }
         System.exit(0);
     }
+
+    private void showModal() {
+        Stage stage = new Stage();
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.setTitle("Save Game");
+        Label saveGameName = new Label("Name:");
+        TextField textField = new TextField();
+        GridPane gridPane = new GridPane();
+        Button cancelButton = new Button("Cancel");
+        Button saveButton = new Button("Save");
+        cancelButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> stage.close());
+        saveButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> showConfirmDialog());
+        gridPane.setHgap(60);
+        gridPane.setVgap(30);
+        gridPane.add(saveGameName, 2, 2);
+        gridPane.add(textField, 3, 2);
+        gridPane.add(cancelButton, 4, 4);
+        gridPane.add(saveButton, 2, 4);
+        stage.setWidth(600);
+        stage.setHeight(300);
+        stage.setScene(new Scene(gridPane));
+        stage.show();
+    }
+
+    private void showConfirmDialog(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation");
+        alert.setHeaderText("Name already exists");
+        alert.setContentText("Would you like to overwrite?");
+        alert.show();
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            // ... overwrite
+        } else {
+            alert.close();
+        }
+    }
+
 }
