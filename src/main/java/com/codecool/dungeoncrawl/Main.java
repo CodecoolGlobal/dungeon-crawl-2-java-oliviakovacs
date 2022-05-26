@@ -42,7 +42,7 @@ public class Main extends Application {
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
     Label attackStrengthLabel = new Label();
-    //Label mapLabel = new Label();
+    Label mapLabel = new Label();
     Button pickUpButton = new Button("Pick up");
 
 
@@ -70,7 +70,7 @@ public class Main extends Application {
         ui.add(new Label("Attack Strength: "), 0, 3);
         ui.add(healthLabel, 1, 1);
         ui.add(attackStrengthLabel, 1, 3);
-        //ui.add(mapLabel, 1, 16);
+        ui.add(mapLabel, 1, 14);
         ui.add(new Label("  "), 0, 4);
 
         ui.add(pickUpButton, 0, 5);
@@ -84,7 +84,7 @@ public class Main extends Application {
         ui.add(playerInventory, 0, 8);
 
         // -------------  load game  ------------------
-        Button loadButton = new Button("Load");
+        Button loadButton = new Button("Load Game");
         ui.add(loadButton, 0, 16);
         loadButton.setOnAction(mousedown -> {
             showGetNameModalForGameLoad();
@@ -108,9 +108,9 @@ public class Main extends Application {
         });
         ui.add(new Label("  "), 0, 12);
         ui.add(new Label("  "), 0, 13);
-        ui.add(new Label("  "), 0, 14);
+        //ui.add(new Label("  "), 0, 14);
         ui.add(new Label("  "), 0, 15);
-        //ui.add(new Label("Map:"), 0, 16);
+        ui.add(new Label("Map:"), 0, 14);
         //ui.add(new Label("  "), 0, 16);
         ui.add(new Label("  "), 0, 17);
         ui.add(restartButton, 0, 18);
@@ -214,6 +214,7 @@ public class Main extends Application {
             System.out.println("---------------------  YOU WON!!!  -----------------------");
             map.getPlayer().setChangeMap(true);
             map.getPlayer().setPlayerOnMap(4);
+            mapLabel.setText("YOU WON!!!");
             refresh();
         }
     }
@@ -240,12 +241,13 @@ public class Main extends Application {
             }
             healthLabel.setText("" + map.getPlayer().getHealth());
             attackStrengthLabel.setText("" + map.getPlayer().getAttackStrength());
-            //mapLabel.setText("" + map.getPlayer().getPlayerOnMap());
+            mapLabel.setText("" + map.getPlayer().getPlayerOnMap());
             playerInventory.setText("");
             playerInventory.setText(map.getPlayer().displayInventory());
 
             if (isPlayerDead(map.getPlayer())) {
                 healthLabel.setText("YOU DIED!");
+                mapLabel.setText("LOOSER MAP");
             }
         }
     }
@@ -263,11 +265,14 @@ public class Main extends Application {
             map.getPlayer().setPlayerOnMap(2);
         } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 3) {
             map = MapLoader.loadMap(3);
+            map.getPlayer().setPlayerOnMap(3);
         } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 4) {
             map = MapLoader.loadMap(4);
+            map.getPlayer().setPlayerOnMap(0);
             new SoundClipTest("winbanjo.wav");
         } else if (map.getPlayer().getChangeMap() == true && map.getPlayer().getPlayerOnMap() == 5) {
             map = MapLoader.loadMap(5);
+            map.getPlayer().setPlayerOnMap(0);
             new SoundClipTest("horn-fail.wav");
         }
         map.getPlayer().setChangeMap(false);
@@ -353,12 +358,17 @@ public class Main extends Application {
     }
 
     public void loadGame(String chosenName){
+        int currentMap = dbManager.getMapByPlayerName(chosenName);
+        map = MapLoader.loadMap(currentMap);
+
+
        HashMap playerDictionary = dbManager.getPlayerByName(chosenName);
        Player player = map.getPlayer();
        player.setHealth((int) playerDictionary.get("hp"));
        player.getCell().setX((int) playerDictionary.get("x"));
        player.getCell().setX((int) playerDictionary.get("y"));
        player.setAttackStrength((int) playerDictionary.get("attack_strength"));
+       player.setInventory(new ArrayList<Item>());
        for (int i=0; i<(int) playerDictionary.get("sword"); i++) {
            player.addToInventory(new Sword(new Cell(map, 0, 0, CellType.FLOOR)));
        }
