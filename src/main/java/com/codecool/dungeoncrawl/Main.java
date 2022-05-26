@@ -43,8 +43,6 @@ public class Main extends Application {
     Label mapLabel = new Label();
     Button pickUpButton = new Button("Pick up");
 
-
-
     Label playerInventory = new Label("INVENTORY: ");
     GameDatabaseManager dbManager;
 
