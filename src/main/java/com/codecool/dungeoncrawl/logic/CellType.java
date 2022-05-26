@@ -17,7 +17,8 @@ public enum CellType {
     ROOF("roof"),
     TOWER("tower"),
     WALLTHREE("wallthree"),
-    FLOORTHREE("floorthree");
+    FLOORTHREE("floorthree"),
+    FRIEND("friend");
 
     private final String tileName;
 

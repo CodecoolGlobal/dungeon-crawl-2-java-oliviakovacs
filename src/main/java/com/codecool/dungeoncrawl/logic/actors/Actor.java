@@ -60,6 +60,15 @@ public abstract class Actor implements Drawable {
         }
     }
 
+    public void movePlayerToPosition(int x, int y) {
+        Cell newCell = new Cell(this.getCell().getGameMap(), x, y, CellType.FLOOR);
+        newCell.setActor(this);
+        cell.setActor(null);
+        cell = newCell;
+    }
+
+
+
     public void attack(Cell cell, Cell nextCell) {
         Actor monsterAttacked = nextCell.getActor();
         System.out.println("FIGHT!!!! " + this.getTileName() + " attacked the " + monsterAttacked.getTileName());

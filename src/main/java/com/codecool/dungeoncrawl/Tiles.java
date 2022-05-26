@@ -26,7 +26,7 @@ public class Tiles {
         tileMap.put("empty", new Tile(0, 0));
         tileMap.put("wall", new Tile(4, 18));
         tileMap.put("floor", new Tile(2, 0));
-        tileMap.put("player", new Tile(20, 7));  //(27, 0)
+        tileMap.put("player", new Tile(20, 8));  //(27, 0)
         tileMap.put("skeleton", new Tile(29, 6));
         tileMap.put("zombie", new Tile(24, 7));
         tileMap.put("ghost", new Tile(26, 6));
@@ -46,8 +46,9 @@ public class Tiles {
         tileMap.put("bridge", new Tile(4, 6));
         tileMap.put("roof", new Tile(5, 11));
         tileMap.put("tower", new Tile(10, 17));
-        tileMap.put("wallthree", new Tile(0, 2));
-        tileMap.put("floorthree", new Tile(15, 27));
+        tileMap.put("wallthree", new Tile(4, 2));
+        tileMap.put("floorthree", new Tile(1, 0)); //(15, 27)
+        tileMap.put("friend", new Tile(20, 7));
     }
 
     public static void drawTile(GraphicsContext context, Drawable d, int x, int y) {

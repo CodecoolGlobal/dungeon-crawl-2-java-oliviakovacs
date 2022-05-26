@@ -19,7 +19,7 @@ public class Cell implements Drawable {
         this.item = item;
     }
 
-    Cell(GameMap gameMap, int x, int y, CellType type) {
+    public Cell(GameMap gameMap, int x, int y, CellType type) {
         this.gameMap = gameMap;
         this.x = x;
         this.y = y;
@@ -70,5 +70,13 @@ public class Cell implements Drawable {
 
     public void setSecondActor(Actor secondActor) {
         this.secondActor = secondActor;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 }
