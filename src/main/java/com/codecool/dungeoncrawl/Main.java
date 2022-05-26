@@ -366,7 +366,7 @@ public class Main extends Application {
        Player player = map.getPlayer();
        player.setHealth((int) playerDictionary.get("hp"));
        player.getCell().setX((int) playerDictionary.get("x"));
-       player.getCell().setX((int) playerDictionary.get("y"));
+       player.getCell().setY((int) playerDictionary.get("y"));
        player.setAttackStrength((int) playerDictionary.get("attack_strength"));
        player.setInventory(new ArrayList<Item>());
        for (int i=0; i<(int) playerDictionary.get("sword"); i++) {
@@ -375,6 +375,11 @@ public class Main extends Application {
        for (int i=0; i<(int) playerDictionary.get("key"); i++) {
            player.addToInventory(new Key(new Cell(map, 0, 0, CellType.FLOOR)));
        }
+       //relocate player on map
+
+       player.movePlayerToPosition(player.getCell().getX(), player.getCell().getY());
+       System.out.println("x: " + player.getCell().getX() + ", y: " + player.getCell().getY() );
+       refresh();
     }
 
     private void showGetNameModalForGameLoad() {
