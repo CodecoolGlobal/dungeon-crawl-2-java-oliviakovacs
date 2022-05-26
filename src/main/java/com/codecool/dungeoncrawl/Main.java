@@ -89,6 +89,25 @@ public class Main extends Application {
 
         loadButton.setFocusTraversable(false);
 
+        //--------------  export game ------------------
+        Button exportButton = new Button("Export");
+        ui.add(exportButton, 0, 19);
+        exportButton.setOnAction(mousedown -> {
+            refresh();
+        });
+        exportButton.setFocusTraversable(false);
+        //--------------  export game end ----------------
+
+        //--------------  import game ------------------
+        Button importButton = new Button("Import");
+        ui.add(importButton, 0, 20);
+        importButton.setOnAction(mousedown -> {
+            refresh();
+        });
+        importButton.setFocusTraversable(false);
+        //--------------  import game end ----------------
+
+
         // -------------  load game end ------------------
 
 
@@ -334,6 +353,8 @@ public class Main extends Application {
             alert.close();
         }
     }
+
+
 
     public void savePlayerInDb(Button saveButton, String name) {
         Integer playerId = dbManager.getPlayerIdByNameManager(name);
