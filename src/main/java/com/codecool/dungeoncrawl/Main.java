@@ -358,6 +358,7 @@ public class Main extends Application {
        player.getCell().setX((int) playerDictionary.get("x"));
        player.getCell().setY((int) playerDictionary.get("y"));
        player.setAttackStrength((int) playerDictionary.get("attack_strength"));
+       player.setPlayerOnMap(currentMap);
        player.setInventory(new ArrayList<Item>());
        for (int i=0; i<(int) playerDictionary.get("sword"); i++) {
            player.addToInventory(new Sword(new Cell(map, 0, 0, CellType.FLOOR)));
