@@ -1,6 +1,5 @@
 package com.codecool.dungeoncrawl;
 
-import com.codecool.dungeoncrawl.dao.PlayerDao;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
@@ -27,11 +26,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-
 import java.util.*;
 import java.sql.SQLException;
-
-import java.lang.Throwable;
 
 
 public class Main extends Application {
@@ -49,7 +45,6 @@ public class Main extends Application {
 
     Label playerInventory = new Label("INVENTORY: ");
     GameDatabaseManager dbManager;
-    //PlayerDao playerDao;
 
     public static void main(String[] args) {
         launch(args);
@@ -58,7 +53,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         setupDbManager();
-        //playerDao = dbManager.getPlayerDao();
         GridPane ui = new GridPane();
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
@@ -108,10 +102,10 @@ public class Main extends Application {
         });
         ui.add(new Label("  "), 0, 12);
         ui.add(new Label("  "), 0, 13);
-        //ui.add(new Label("  "), 0, 14);
+
         ui.add(new Label("  "), 0, 15);
         ui.add(new Label("Map:"), 0, 14);
-        //ui.add(new Label("  "), 0, 16);
+
         ui.add(new Label("  "), 0, 17);
         ui.add(restartButton, 0, 18);
         restartButton.setFocusTraversable(false);
@@ -166,10 +160,6 @@ public class Main extends Application {
                 map.getPlayer().move(1, 0);
                 refresh();
                 break;
-//            case S:
-//                Player player = map.getPlayer();
-//                dbManager.savePlayer(player);
-//                break;
         }
 
         map.repositionCenter();
@@ -221,6 +211,7 @@ public class Main extends Application {
 
 
     private void refresh() {
+        map.repositionCenter();
         int minX = map.getCenterCell().getX() - CANVAS_SIZE / 2;
         int minY = map.getCenterCell().getY() - CANVAS_SIZE / 2;
         int maxX = map.getCenterCell().getX() + CANVAS_SIZE / 2;
@@ -343,9 +334,7 @@ public class Main extends Application {
     }
 
     public void savePlayerInDb(Button saveButton, String name) {
-        //Integer playerId = playerDao.GetPlayerIdByName(name);
         Integer playerId = dbManager.getPlayerIdByNameManager(name);
-//        System.out.println(resultSet);
         System.out.println(playerId);
         Player player = map.getPlayer();
         player.setName(name);
@@ -361,7 +350,6 @@ public class Main extends Application {
         int currentMap = dbManager.getMapByPlayerName(chosenName);
         map = MapLoader.loadMap(currentMap);
 
-
        HashMap playerDictionary = dbManager.getPlayerByName(chosenName);
        Player player = map.getPlayer();
        player.setHealth((int) playerDictionary.get("hp"));
@@ -375,8 +363,7 @@ public class Main extends Application {
        for (int i=0; i<(int) playerDictionary.get("key"); i++) {
            player.addToInventory(new Key(new Cell(map, 0, 0, CellType.FLOOR)));
        }
-       //relocate player on map
-
+       //relocate player on map:
        player.movePlayerToPosition(player.getCell().getX(), player.getCell().getY());
        System.out.println("x: " + player.getCell().getX() + ", y: " + player.getCell().getY() );
        refresh();

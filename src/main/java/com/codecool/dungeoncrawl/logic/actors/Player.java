@@ -90,7 +90,7 @@ public class Player extends Actor {
                 new SoundClipTest("potion-drink.wav");
 
             }
-            System.out.println(inventory);
+            //System.out.println(inventory);
             this.getCell().setItem(null);
         }
     }

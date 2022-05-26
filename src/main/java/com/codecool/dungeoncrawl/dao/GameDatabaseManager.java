@@ -9,7 +9,6 @@ import javax.sql.DataSource;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -44,7 +43,6 @@ public class GameDatabaseManager {
     }
 
     public Integer getPlayerIdByNameManager(String name) {
-        System.out.println("im in dbmanager get player id");
         Integer playerId = playerDao.getPlayerIdByName(name);
         return playerId;
     }

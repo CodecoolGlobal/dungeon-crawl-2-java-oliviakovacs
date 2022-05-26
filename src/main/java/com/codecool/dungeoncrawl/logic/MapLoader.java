@@ -21,7 +21,7 @@ public class MapLoader {
         } else if (playerOnMap == 2){
             is = MapLoader.class.getResourceAsStream("/map2.txt");
         } else if (playerOnMap == 3){
-            is = MapLoader.class.getResourceAsStream("/map4.txt");
+            is = MapLoader.class.getResourceAsStream("/map3.txt");
         } else if (playerOnMap == 4){
             is = MapLoader.class.getResourceAsStream("/win.txt");  ///ide tedd a WIN txt-t!!!
         } else {
@@ -120,6 +120,9 @@ public class MapLoader {
                             break;
                         case 'T':
                             cell.setType(CellType.TREES);
+                            break;
+                        case 'F':
+                            cell.setType(CellType.FRIEND);
                             break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");

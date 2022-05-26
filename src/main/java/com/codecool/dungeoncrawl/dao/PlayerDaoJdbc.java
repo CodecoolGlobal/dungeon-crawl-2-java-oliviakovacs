@@ -49,11 +49,7 @@ public class PlayerDaoJdbc implements PlayerDao {
             statement.setInt(5, player.getSword());
             statement.setInt(6, player.getKey());
             statement.setString(7, player.getPlayerName());
-            //statement.setString(7, "Test Name");
             statement.executeUpdate();
-            //ResultSet resultSet = statement.getGeneratedKeys();
-            //resultSet.next();
-            //player.setId(resultSet.getInt(1));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
