@@ -13,6 +13,8 @@ import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
 import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.items.Sword;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -373,10 +375,14 @@ public class Main extends Application {
         ArrayList<String> names = dbManager.getAllNames();
         System.out.println("Names from db : " +names);
 
+        ListView<String> nameList = new ListView<String>();
+        ObservableList<String> items = FXCollections.observableArrayList (names);
+        nameList.setItems(items);
+
         Stage stage = new Stage();
         stage.initModality(Modality.WINDOW_MODAL);
         stage.setTitle("Load Game");
-        Label loadGameName = new Label("Name:");
+        Label loadGameName = new Label("Saves:");
         TextField textField = new TextField();
         GridPane gridPane = new GridPane();
         Button cancelButton = new Button("Cancel");
@@ -384,7 +390,7 @@ public class Main extends Application {
         cancelButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> stage.close());
 
         loadButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            String chosenName = textField.getText();
+            String chosenName = nameList.getSelectionModel().getSelectedItem();;
             loadGame(chosenName);
             refresh();
             System.out.println("Clicked the load button");
@@ -393,8 +399,8 @@ public class Main extends Application {
         gridPane.setHgap(60);
         gridPane.setVgap(30);
         gridPane.add(loadGameName, 2, 2);
-        gridPane.add(textField, 3, 2);
-        gridPane.add(cancelButton, 4, 4);
+        gridPane.add(nameList, 3, 2);
+        gridPane.add(cancelButton, 3, 4);
         gridPane.add(loadButton, 2, 4);
         stage.setWidth(600);
         stage.setHeight(300);
